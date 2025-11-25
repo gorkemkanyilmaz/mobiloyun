@@ -1,0 +1,240 @@
+.game-container.vampir-koylu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+.vampir-koylu.night {
+    background: #0f0f1a;
+}
+
+.vampir-koylu.day {
+    background: #87ceeb;
+    color: #000;
+}
+
+.vampir-koylu.voting {
+    background: #e67e22;
+    color: #000;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.role-card .value {
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.value.VAMPIR {
+    color: #ff4757;
+}
+
+.value.DOKTOR {
+    color: #2ed573;
+}
+
+.value.KOYLU {
+    color: #ffa502;
+}
+
+.game-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.role-reveal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.ready-btn {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #2ed573;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.ready-btn-small {
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+    background: #2ed573;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+.player-token {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.player-token:hover {
+    transform: scale(1.05);
+}
+
+.player-token.selected .avatar img {
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 10px #f1c40f;
+}
+
+.avatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.dead-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.status-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-size: 0.8rem;
+    color: #000;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.vote-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 2px solid #fff;
+    z-index: 2;
+}
+
+.voted-for {
+    font-size: 0.75rem;
+    color: #f1c40f;
+    margin-top: 2px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+}
+
+.action-area {
+    margin-top: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    min-height: 120px;
+}
+
+.logs {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    max-height: 60px;
+    overflow-y: auto;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 0.5rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-btn:disabled {
+    background: #57606f;
+    cursor: not-allowed;
+}
+
+.dead-message {
+    color: #ff4757;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.villager-night-message {
+    color: #a4b0be;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 1rem;
+}
