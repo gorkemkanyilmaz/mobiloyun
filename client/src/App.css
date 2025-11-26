@@ -1,5 +1,72 @@
 /* App.css */
 
+:root {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent-color: #bb86fc;
+  --success-color: #03dac6;
+  --error-color: #cf6679;
+  --primary-btn-bg: #3700b3;
+  /* Blue-ish purple */
+  --primary-btn-text: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+/* New Button Styles */
+.primary-btn {
+  background-color: var(--primary-btn-bg);
+  color: var(--primary-btn-text);
+  border: 2px solid var(--primary-btn-bg);
+}
+
+.primary-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.secondary-btn {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.secondary-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .error-toast {
   position: fixed;
   top: 20px;
@@ -101,6 +168,38 @@
   border-color: var(--accent-color);
 }
 
+/* Avatar Selection */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.avatar-option {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.avatar-option:hover {
+  transform: scale(1.1);
+}
+
+.avatar-option.selected {
+  border-color: var(--success-color);
+  box-shadow: 0 0 10px var(--success-color);
+}
+
+.avatar-option img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  display: block;
+}
+
 .form-actions {
   display: flex;
   gap: 1rem;
@@ -109,11 +208,6 @@
 
 .form-actions button {
   flex: 1;
-}
-
-.secondary {
-  background-color: transparent;
-  border: 1px solid #333;
 }
 
 /* Lobby */

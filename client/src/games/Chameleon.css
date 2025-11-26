@@ -1,0 +1,138 @@
+.chameleon .role-card .value.imposter {
+    color: #ff4081;
+}
+
+.chameleon .role-card .value.citizen {
+    color: #00e676;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.topic-info h3 {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.secret-word-box {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.secret-word span {
+    color: var(--success-color);
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.imposter-msg {
+    color: #ff4081;
+    font-style: italic;
+}
+
+.words-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.word-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent-color);
+    color: white;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.word-btn:hover {
+    background: var(--accent-color);
+    color: black;
+}
+
+/* Player Token Styles */
+.chameleon .players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.chameleon .player-token {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.chameleon .player-token:hover {
+    transform: scale(1.05);
+}
+
+.chameleon .player-token.selected .avatar img {
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 10px #f1c40f;
+}
+
+.chameleon .avatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.chameleon .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #fff;
+    display: block;
+}
+
+/* Badges */
+.chameleon .speaker-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    cursor: help;
+}
+
+.chameleon .vote-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 2px solid #fff;
+    z-index: 2;
+}

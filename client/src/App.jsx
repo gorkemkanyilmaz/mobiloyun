@@ -5,6 +5,8 @@ import RoomSetup from './components/RoomSetup';
 import Lobby from './components/Lobby';
 import VampirKoylu from './games/VampirKoylu';
 import SecretHitler from './games/SecretHitler';
+import Chameleon from './games/Chameleon';
+import Uno from './games/Uno';
 import './App.css';
 
 function App() {
@@ -78,12 +80,12 @@ function App() {
     setView('SETUP');
   };
 
-  const handleCreateRoom = (playerName) => {
-    socket.emit('createRoom', { playerName, gameType: selectedGame });
+  const handleCreateRoom = (playerName, avatar) => {
+    socket.emit('createRoom', { playerName, gameType: selectedGame, avatar });
   };
 
-  const handleJoinRoom = (roomId, playerName) => {
-    socket.emit('joinRoom', { roomId, playerName });
+  const handleJoinRoom = (roomId, playerName, avatar) => {
+    socket.emit('joinRoom', { roomId, playerName, avatar });
   };
 
   const handleReady = () => {
@@ -140,6 +142,8 @@ function App() {
           <div className="game-wrapper">
             {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} />}
             {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} />}
+            {room?.gameType === 'CHAMELEON' && <Chameleon room={room} />}
+            {room?.gameType === 'UNO' && <Uno room={room} />}
           </div>
         )}
       </main>

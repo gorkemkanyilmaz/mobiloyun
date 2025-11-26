@@ -3,14 +3,17 @@ import React, { useState } from 'react';
 function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
     const [playerName, setPlayerName] = useState('');
     const [roomId, setRoomId] = useState('');
+    const [selectedAvatar, setSelectedAvatar] = useState('1');
     const [mode, setMode] = useState('MENU'); // MENU, JOIN, CREATE
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const avatars = Array.from({ length: 10 }, (_, i) => (i + 1).toString());
 
     const handleJoin = (e) => {
         e.preventDefault();
         if (playerName && roomId && !isSubmitting) {
             setIsSubmitting(true);
-            onJoin(roomId.toUpperCase(), playerName);
+            onJoin(roomId.toUpperCase(), playerName, selectedAvatar);
             setTimeout(() => setIsSubmitting(false), 2000);
         }
     };
@@ -19,7 +22,7 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
         e.preventDefault();
         if (playerName && !isSubmitting) {
             setIsSubmitting(true);
-            onCreate(playerName);
+            onCreate(playerName, selectedAvatar);
             setTimeout(() => setIsSubmitting(false), 2000);
         }
     };
@@ -29,9 +32,9 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
             <div className="room-setup">
                 <h3>{selectedGame}</h3>
                 <div className="setup-actions">
-                    <button onClick={() => setMode('CREATE')}>Lobi Oluştur</button>
-                    <button onClick={() => setMode('JOIN')}>Lobiye Katıl</button>
-                    <button className="secondary" onClick={onBack}>Geri</button>
+                    <button className="primary-btn" onClick={() => setMode('CREATE')}>Lobi Oluştur</button>
+                    <button className="primary-btn" onClick={() => setMode('JOIN')}>Lobiye Katıl</button>
+                    <button className="secondary-btn" onClick={onBack}>Geri</button>
                 </div>
             </div>
         );
@@ -53,6 +56,21 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
                     />
                 </div>
 
+                <div className="form-group">
+                    <label>Avatar Seç</label>
+                    <div className="avatar-grid">
+                        {avatars.map((seed) => (
+                            <div
+                                key={seed}
+                                className={`avatar-option ${selectedAvatar === seed ? 'selected' : ''}`}
+                                onClick={() => setSelectedAvatar(seed)}
+                            >
+                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`} alt="avatar" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {mode === 'JOIN' && (
                     <div className="form-group">
                         <label>Oda Kodu</label>
@@ -68,8 +86,17 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
                 )}
 
                 <div className="form-actions">
-                    <button type="submit" disabled={isSubmitting}>{mode === 'CREATE' ? 'Oluştur' : 'Katıl'}</button>
-                    <button type="button" className="secondary" onClick={() => setMode('MENU')} disabled={isSubmitting}>İptal</button>
+                    <button type="submit" className="primary-btn" disabled={isSubmitting}>
+                        {mode === 'CREATE' ? 'Oluştur' : 'Katıl'}
+                    </button>
+                    <button
+                        type="button"
+                        className="secondary-btn"
+                        onClick={() => setMode('MENU')}
+                        disabled={isSubmitting}
+                    >
+                        İptal
+                    </button>
                 </div>
             </form>
         </div>

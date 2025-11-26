@@ -24,7 +24,7 @@ class RoomManager {
         return result;
     }
 
-    createRoom(socket, { playerName, gameType }) {
+    createRoom(socket, { playerName, gameType, avatar }) {
         const roomId = this.generateRoomId();
         const room = {
             id: roomId,
@@ -33,7 +33,7 @@ class RoomManager {
                 name: playerName,
                 isHost: true,
                 isReady: false,
-                avatar: Math.floor(Math.random() * 10) // Random avatar index
+                avatar: avatar || '1' // Use provided avatar or default
             }],
             gameState: null,
             gameType: gameType || 'VAMPIR_KOYLU', // Default or selected
@@ -48,7 +48,7 @@ class RoomManager {
         console.log(`Room created: ${roomId} by ${playerName} for ${room.gameType}`);
     }
 
-    joinRoom(socket, { roomId, playerName }) {
+    joinRoom(socket, { roomId, playerName, avatar }) {
         const room = this.rooms.get(roomId);
         if (!room) {
             socket.emit('error', { message: 'Room not found' });
@@ -75,7 +75,7 @@ class RoomManager {
             name: playerName,
             isHost: false,
             isReady: false,
-            avatar: Math.floor(Math.random() * 10)
+            avatar: avatar || '1'
         };
 
         room.players.push(newPlayer);
