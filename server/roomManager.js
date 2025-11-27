@@ -195,8 +195,18 @@ class RoomManager {
 
                 // Set timeout to fully remove (Store in Map, NOT in player object)
                 const timeout = setTimeout(() => {
-                    this.removePlayer(roomId, player.id);
-                }, 5 * 60 * 1000); // 5 minutes
+                    // STRICT TIMEOUT: If player doesn't return in 1 minute, close the room for everyone.
+                    console.log(`Player ${player.name} timed out. Closing room ${roomId}.`);
+
+                    this.io.to(roomId).emit('roomClosed', {
+                        reason: `${player.name} tekrar bağlanmadı. Oyun iptal edildi.`
+                    });
+
+                    this.rooms.delete(roomId);
+                    // Cleanup all timeouts for this room? 
+                    // Ideally yes, but for now just deleting room prevents interactions.
+
+                }, 60 * 1000); // 1 minute strict timeout
 
                 this.disconnectTimeouts.set(player.id, timeout);
 

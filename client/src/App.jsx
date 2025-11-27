@@ -87,10 +87,20 @@ function App() {
       setPausedBy(null);
     }
 
+    function onRoomClosed({ reason }) {
+      alert(reason); // Simple alert for now, or use error toast
+      localStorage.removeItem('ph_roomId');
+      localStorage.removeItem('ph_playerId');
+      setView('MENU');
+      setRoom(null);
+      setPausedBy(null);
+    }
+
     function onError(err) {
       setError(err.message);
-      // If room not found on rejoin, clear storage
+      // If room not found on rejoin, clear storage to prevent stuck loop
       if (err.message.includes('not found') || err.message.includes('expired')) {
+        console.log('Room not found, clearing session...');
         localStorage.removeItem('ph_roomId');
         localStorage.removeItem('ph_playerId');
         setView('MENU');
@@ -118,6 +128,7 @@ function App() {
     socket.on('gameStarted', onGameStarted);
     socket.on('gamePaused', onGamePaused);
     socket.on('gameResumed', onGameResumed);
+    socket.on('roomClosed', onRoomClosed);
     socket.on('error', onError);
 
     socket.connect();
@@ -139,6 +150,7 @@ function App() {
       socket.off('gameStarted', onGameStarted);
       socket.off('gamePaused', onGamePaused);
       socket.off('gameResumed', onGameResumed);
+      socket.off('roomClosed', onRoomClosed);
       socket.off('error', onError);
       socket.disconnect();
       clearInterval(pingInterval);

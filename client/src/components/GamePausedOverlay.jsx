@@ -8,7 +8,7 @@ function GamePausedOverlay({ pausedBy }) {
                 <div className="spinner">⏸</div>
                 <h2>OYUN DURAKLATILDI</h2>
                 <p><strong>{pausedBy}</strong> bağlantısı koptu.</p>
-                <p>Tekrar bağlanması bekleniyor...</p>
+                <p>1 dakika içinde bağlanmazsa oyun iptal edilecek.</p>
             </div>
         </div>
     );
