@@ -3,6 +3,7 @@ class RoomManager {
         this.io = io;
         this.rooms = new Map(); // roomId -> roomData
         this.socketToRoom = new Map(); // socketId -> roomId
+        this.disconnectTimeouts = new Map(); // playerId -> timeout
         this.gameHandler = null; // Will be set by index.js
     }
 
@@ -148,46 +149,13 @@ class RoomManager {
             return;
         }
 
-        // Update player socket ID
-        // We need to map the OLD player ID to the NEW socket ID for game logic continuity?
-        // Actually, usually player ID = socket ID. If we change it, we break game state references.
-        // BETTER APPROACH: Keep the original player.id (which was the old socket.id) as the stable ID.
-        // But we need to map the NEW socket.id to this player object for routing.
-
-        // Let's update the player's "socketId" property if we had one, but we use "id" as both.
-        // Complex refactor: Separate "playerId" (uuid) from "socketId".
-        // Quick fix for now: Update the map, but keep the player object's ID same? 
-        // No, socket.to(player.id) won't work if player.id is the old socket id.
-
-        // STRATEGY: 
-        // 1. Player has a stable `uuid` generated on join.
-        // 2. `socket.id` is transient.
-        // Refactoring to UUIDs is too big.
-
-        // ALTERNATIVE:
-        // Update the player.id to the new socket.id.
-        // AND update all game states that reference this ID. (Hard, game logic specific).
-
-        // ALTERNATIVE 2 (Chosen):
-        // Keep player.id as the OLD socket ID (so game state references don't break).
-        // Join the NEW socket to the room.
-        // Map new socket to the room.
-        // BUT: When we emit to `player.id`, it goes to the old socket (now dead).
-        // We need to join the new socket to a room named `player.id` (the old one).
-
-        // Let's try:
-        // 1. Player reconnects.
-        // 2. We find the player by some other token? Or just trust them?
-        //    - We need a "reconnectToken" or just use the old socket ID if client saved it.
-        //    - Client sends: { roomId, oldSocketId }.
-        // 3. We find player with `id === oldSocketId`.
-        // 4. We update `player.connected = true`.
-        // 5. We make the NEW socket join the room `roomId`.
-        // 6. CRITICAL: We make the NEW socket join the room named `oldSocketId`. 
-        //    This way `io.to(oldSocketId).emit(...)` works!
-
         player.connected = true;
-        clearTimeout(player.disconnectTimeout);
+
+        // Clear timeout from Map
+        if (this.disconnectTimeouts.has(player.id)) {
+            clearTimeout(this.disconnectTimeouts.get(player.id));
+            this.disconnectTimeouts.delete(player.id);
+        }
 
         this.socketToRoom.set(socket.id, roomId);
         socket.join(roomId);
@@ -211,9 +179,7 @@ class RoomManager {
 
         const room = this.rooms.get(roomId);
         if (room) {
-            const player = room.players.find(p => p.id === socket.id); // This might fail if we are using the "alias" trick? 
-            // Wait, socket.id is the NEW one on disconnect? No, it's the dying one.
-            // If we aliased, the player.id is the dying socket.id. So this works.
+            const player = room.players.find(p => p.id === socket.id);
 
             if (player) {
                 player.connected = false;
@@ -227,15 +193,16 @@ class RoomManager {
                     });
                 }
 
-                // Set timeout to fully remove
-                player.disconnectTimeout = setTimeout(() => {
+                // Set timeout to fully remove (Store in Map, NOT in player object)
+                const timeout = setTimeout(() => {
                     this.removePlayer(roomId, player.id);
                 }, 5 * 60 * 1000); // 5 minutes
+
+                this.disconnectTimeouts.set(player.id, timeout);
 
                 this.io.to(roomId).emit('roomUpdated', room);
             }
         }
-        // Do NOT delete socketToRoom yet? No, we must, or map grows.
         this.socketToRoom.delete(socket.id);
     }
 
@@ -244,6 +211,12 @@ class RoomManager {
         if (!room) return;
 
         room.players = room.players.filter(p => p.id !== playerId);
+
+        // Clean up timeout if exists
+        if (this.disconnectTimeouts.has(playerId)) {
+            clearTimeout(this.disconnectTimeouts.get(playerId));
+            this.disconnectTimeouts.delete(playerId);
+        }
 
         if (room.players.length === 0) {
             this.rooms.delete(roomId);
