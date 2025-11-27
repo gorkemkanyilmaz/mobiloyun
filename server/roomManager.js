@@ -157,9 +157,39 @@ class RoomManager {
             this.disconnectTimeouts.delete(player.id);
         }
 
-        this.socketToRoom.set(socket.id, roomId);
+        // CRITICAL FIX: Update player ID to new socket ID
+        // This ensures game logic (which uses socket.id) works for the reconnected player.
+        const oldPlayerId = player.id;
+        const newPlayerId = socket.id;
+
+        player.id = newPlayerId; // Update internal player object
+        this.socketToRoom.delete(oldPlayerId); // Remove old mapping (if any)
+        this.socketToRoom.set(newPlayerId, roomId); // Add new mapping
+
+        // Update Game State if exists
+        if (room.gameState) {
+            // Update Hands
+            if (room.gameState.hands && room.gameState.hands[oldPlayerId]) {
+                room.gameState.hands[newPlayerId] = room.gameState.hands[oldPlayerId];
+                delete room.gameState.hands[oldPlayerId];
+            }
+            // Update Turn
+            if (room.gameState.turnPlayerId === oldPlayerId) {
+                room.gameState.turnPlayerId = newPlayerId;
+            }
+            // Update Winner
+            if (room.gameState.winner === oldPlayerId) {
+                room.gameState.winner = newPlayerId;
+            }
+            // Update Uno Calls
+            if (room.gameState.unoCalls && room.gameState.unoCalls[oldPlayerId] !== undefined) {
+                room.gameState.unoCalls[newPlayerId] = room.gameState.unoCalls[oldPlayerId];
+                delete room.gameState.unoCalls[oldPlayerId];
+            }
+        }
+
         socket.join(roomId);
-        socket.join(player.id); // Join the "channel" of the old ID
+        // socket.join(player.id); // No longer needed as ID is now socket.id
 
         // Resume game if all connected
         const allConnected = room.players.every(p => p.connected);
@@ -168,9 +198,10 @@ class RoomManager {
             this.io.to(roomId).emit('gameResumed');
         }
 
-        socket.emit('rejoinSuccess', { room, playerId: player.id });
+        // Send new ID to client so they can update localStorage
+        socket.emit('rejoinSuccess', { room, playerId: newPlayerId });
         this.io.to(roomId).emit('roomUpdated', room);
-        console.log(`Player ${player.name} reconnected to ${roomId}`);
+        console.log(`Player ${player.name} reconnected to ${roomId} (ID updated: ${oldPlayerId} -> ${newPlayerId})`);
     }
 
     handleDisconnect(socket) {

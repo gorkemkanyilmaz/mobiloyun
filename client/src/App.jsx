@@ -51,18 +51,22 @@ function App() {
       setError(null);
       localStorage.setItem('ph_roomId', joinedRoom.id);
       localStorage.setItem('ph_playerId', socket.id);
+      setPlayerId(socket.id); // Set player ID on join
     }
 
     function onRejoinSuccess({ room, playerId }) {
+      console.log('Rejoined room:', room.id);
+      // Update local storage with NEW player ID if it changed
+      localStorage.setItem('ph_playerId', playerId);
+      setPlayerId(playerId); // Update state
+
       setRoom(room);
       if (room.status === 'PLAYING' || room.status === 'PAUSED') {
         setView('GAME');
       } else {
         setView('LOBBY');
       }
-      setPausedBy(room.status === 'PAUSED' ? 'Bir oyuncu' : null);
-      // Ensure we keep the old ID as our identity for this session if needed?
-      // Actually, we just rejoined. socket.id is new, but server maps us to old player.
+      setPausedBy(null);
     }
 
     function onRoomUpdated(updatedRoom) {

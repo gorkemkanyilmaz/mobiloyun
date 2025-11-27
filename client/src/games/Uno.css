@@ -487,35 +487,6 @@
     left: 4px;
     font-size: 0.8rem;
     color: white;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-}
-
-/* My Hand - Scrollable, Side by Side */
-.my-hand {
-    display: flex;
-    justify-content: flex-start;
-    padding: 0.5rem 1rem 2rem 1rem;
-    /* Raised bottom padding */
-    gap: 5px;
-    overflow-x: auto;
-    overflow-y: visible;
-    min-height: 150px;
-    /* Taller container */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-    width: 100%;
-    box-sizing: border-box;
-    align-items: flex-end;
-    z-index: 30;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    position: absolute;
-    bottom: 0;
-}
-
-/* Hide scrollbar but keep functionality */
-.my-hand::-webkit-scrollbar {
-    display: none;
 }
 
 /* Dynamic Sizing for many cards */
