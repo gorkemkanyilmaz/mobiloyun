@@ -137,7 +137,7 @@ function Uno({ room, playerId }) {
             </div>
 
             {/* My Hand */}
-            <div className={`my-hand ${isMyTurn ? 'active-turn' : ''}`}>
+            <div className={`my-hand ${isMyTurn ? 'active-turn' : ''} ${gameState.myHand.length > 7 ? 'compact-hand' : ''}`}>
                 {gameState.myHand.map(card => {
                     // Check if playable for simple visual feedback
                     const isPlayable = isMyTurn && (
@@ -151,7 +151,7 @@ function Uno({ room, playerId }) {
                 })}
             </div>
 
-            {/* Color Picker Modal */}
+            {/* ... Color Picker ... */}
             {showColorPicker && (
                 <div className="color-picker-overlay">
                     <div className="color-picker">
@@ -182,7 +182,10 @@ function Uno({ room, playerId }) {
                     <div className="winner-name">
                         {room.players.find(p => p.id === gameState.winner)?.name}
                     </div>
-                    <button onClick={() => window.location.reload()}>Lobiye Dön</button>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                        <button onClick={() => socket.emit('resetToLobby')}>Lobiye Dön</button>
+                        <button onClick={() => socket.emit('playAgain')}>Tekrar Oyna</button>
+                    </div>
                 </div>
             )}
         </div>

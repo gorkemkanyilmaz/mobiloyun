@@ -216,6 +216,41 @@ class RoomManager {
         this.socketToRoom.delete(socket.id);
     }
 
+    resetToLobby(socket) {
+        const roomId = this.socketToRoom.get(socket.id);
+        if (!roomId) return;
+
+        const room = this.rooms.get(roomId);
+        if (!room) return;
+
+        // Only host can reset? Or anyone? Let's say anyone for now or just host.
+        // Usually host controls flow.
+        const player = room.players.find(p => p.id === socket.id);
+        if (!player) return;
+
+        room.status = 'LOBBY';
+        room.gameState = null;
+        room.players.forEach(p => p.isReady = false);
+
+        this.io.to(roomId).emit('roomUpdated', room);
+    }
+
+    playAgain(socket) {
+        const roomId = this.socketToRoom.get(socket.id);
+        if (!roomId) return;
+
+        const room = this.rooms.get(roomId);
+        if (!room) return;
+
+        // Reset game state but keep players
+        room.status = 'PLAYING';
+        room.gameState = null;
+
+        // Re-init game
+        this.io.to(roomId).emit('gameStarted', room);
+        this.gameHandler.initGame(room);
+    }
+
     removePlayer(roomId, playerId) {
         const room = this.rooms.get(roomId);
         if (!room) return;

@@ -23,21 +23,6 @@ roomManager.setGameHandler(gameHandler);
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    // Room Management
-    socket.on('createRoom', (data) => roomManager.createRoom(socket, data));
-    socket.on('joinRoom', (data) => roomManager.joinRoom(socket, data));
-    socket.on('playerReady', (data) => roomManager.playerReady(socket, data));
-    socket.on('startGame', () => roomManager.startGame(socket));
-    socket.on('rejoinRoom', (data) => roomManager.rejoinRoom(socket, data));
-
-    // Game Events
-    socket.on('gameAction', (data) => gameHandler.handleAction(socket, data));
-    socket.on('getGameState', () => gameHandler.handleGetState(socket));
-
-    socket.on('disconnect', () => {
-        roomManager.handleDisconnect(socket);
-        console.log('User disconnected:', socket.id);
-    });
 });
 
 const PORT = process.env.PORT || 3000;
