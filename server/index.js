@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (data) => roomManager.joinRoom(socket, data));
     socket.on('playerReady', (data) => roomManager.playerReady(socket, data));
     socket.on('startGame', () => roomManager.startGame(socket));
+    socket.on('rejoinRoom', (data) => roomManager.rejoinRoom(socket, data));
 
     // Game Events
     socket.on('gameAction', (data) => gameHandler.handleAction(socket, data));

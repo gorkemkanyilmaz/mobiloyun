@@ -9,6 +9,16 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
 
     const avatars = Array.from({ length: 10 }, (_, i) => (i + 1).toString());
 
+    const GAME_NAMES = {
+        'VAMPIR_KOYLU': 'Vampir Köylü',
+        'SECRET_HITLER': 'Secret Hitler',
+        'CHAMELEON': 'Bukalemun',
+        'UNO': 'Uno',
+        'MONOPOLY_DEAL': 'Monopoly Deal',
+        'TABOO': 'Taboo',
+        'GUESS_NUMBER': 'Kim Daha Yakın?'
+    };
+
     const handleJoin = (e) => {
         e.preventDefault();
         if (playerName && roomId && !isSubmitting) {
@@ -30,7 +40,7 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
     if (mode === 'MENU') {
         return (
             <div className="room-setup">
-                <h3>{selectedGame}</h3>
+                <h3>{GAME_NAMES[selectedGame] || selectedGame}</h3>
                 <div className="setup-actions">
                     <button className="primary-btn" onClick={() => setMode('CREATE')}>Lobi Oluştur</button>
                     <button className="primary-btn" onClick={() => setMode('JOIN')}>Lobiye Katıl</button>

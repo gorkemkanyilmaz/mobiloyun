@@ -3,7 +3,7 @@ import React from 'react';
 const GAMES = [
     { id: 'VAMPIR_KOYLU', name: 'Vampir Köylü', icon: '🧛' },
     { id: 'SECRET_HITLER', name: 'Secret Hitler', icon: '📜' },
-    { id: 'CHAMELEON', name: 'Chameleon', icon: '🦎' },
+    { id: 'CHAMELEON', name: 'Bukalemun', icon: '🦎' },
     { id: 'UNO', name: 'Uno', icon: '🃏' },
     { id: 'MONOPOLY_DEAL', name: 'Monopoly Deal', icon: '🏠' },
     { id: 'TABOO', name: 'Taboo', icon: '🚫' },
