@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    /* Fallback */
+    height: 100dvh;
+    /* Dynamic viewport height for mobile browsers */
     width: 100vw;
     background: radial-gradient(circle at center, #34495e 0%, #2c3e50 100%);
     color: white;
@@ -312,7 +315,9 @@
     justify-content: flex-start;
     /* Start from left, scrollable */
     padding: 40px 1rem 2rem 1rem;
-    /* Increased top padding to prevent clipping */
+    /* Fallback padding */
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+    /* Safe area padding */
     gap: 5px;
     overflow-x: auto;
     overflow-y: visible;
@@ -395,7 +400,9 @@
 .uno-controls {
     position: absolute;
     bottom: 200px;
-    /* Raised to clear hand */
+    /* Fallback */
+    bottom: calc(200px + env(safe-area-inset-bottom));
+    /* Safe area adjustment */
     right: 10px;
     z-index: 60;
 }
