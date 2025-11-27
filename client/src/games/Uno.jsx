@@ -137,7 +137,7 @@ function Uno({ room, playerId }) {
             </div>
 
             {/* My Hand */}
-            <div className={`my-hand ${isMyTurn ? 'active-turn' : ''} ${gameState.myHand.length > 5 ? 'compact-hand' : ''}`}>
+            <div className={`my-hand ${isMyTurn ? 'active-turn' : ''}`}>
                 {gameState.myHand.map(card => {
                     // Check if playable for simple visual feedback
                     const isPlayable = isMyTurn && (
