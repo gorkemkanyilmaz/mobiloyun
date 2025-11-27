@@ -160,6 +160,26 @@ class RoomManager {
         // CRITICAL FIX: Update player ID to new socket ID
         // This ensures game logic (which uses socket.id) works for the reconnected player.
         const oldPlayerId = player.id;
+        const newPlayerId = socket.id;
+
+        player.id = newPlayerId; // Update internal player object
+        this.socketToRoom.delete(oldPlayerId); // Remove old mapping (if any)
+        this.socketToRoom.set(newPlayerId, roomId); // Add new mapping
+
+        // Update Game Handler to migrate game state
+        if (this.gameHandler) {
+            this.gameHandler.updatePlayerId(roomId, oldPlayerId, newPlayerId);
+        }
+
+        socket.join(roomId);
+
+        // Resume game if all connected
+        const allConnected = room.players.every(p => p.connected);
+        if (allConnected && room.status === 'PAUSED') {
+            room.status = 'PLAYING';
+            this.io.to(roomId).emit('gameResumed');
+        }
+
         socket.emit('rejoinSuccess', { room, playerId: newPlayerId });
         this.io.to(roomId).emit('roomUpdated', room);
         console.log(`Player ${player.name} reconnected to ${roomId} (ID updated: ${oldPlayerId} -> ${newPlayerId})`);
