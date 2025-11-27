@@ -8,6 +8,7 @@ import SecretHitler from './games/SecretHitler';
 import Chameleon from './games/Chameleon';
 import Uno from './games/Uno';
 import GamePausedOverlay from './components/GamePausedOverlay';
+import ReconnectingOverlay from './components/ReconnectingOverlay';
 import './App.css';
 
 function App() {
@@ -98,6 +99,16 @@ function App() {
       setTimeout(() => setError(null), 3000);
     }
 
+    // Visibility Change Handler for iOS Safari
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && !socket.connected) {
+        console.log('App became visible, forcing reconnect...');
+        socket.connect();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('roomCreated', onRoomCreated);
@@ -131,6 +142,7 @@ function App() {
       socket.off('error', onError);
       socket.disconnect();
       clearInterval(pingInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
@@ -174,7 +186,8 @@ function App() {
       </header>
 
       {error && <div className="error-toast">{error}</div>}
-      {pausedBy && <GamePausedOverlay pausedBy={pausedBy} />}
+      {!isConnected && view !== 'MENU' && <ReconnectingOverlay />}
+      {isConnected && pausedBy && <GamePausedOverlay pausedBy={pausedBy} />}
 
       <main>
         {view === 'MENU' && (
