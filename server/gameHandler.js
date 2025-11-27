@@ -81,6 +81,13 @@ class GameHandler {
             }
         }
     }
+
+    updatePlayerId(roomId, oldPlayerId, newPlayerId) {
+        const game = this.games.get(roomId);
+        if (game && game.updatePlayerId) {
+            game.updatePlayerId(oldPlayerId, newPlayerId);
+        }
+    }
 }
 
 module.exports = GameHandler;

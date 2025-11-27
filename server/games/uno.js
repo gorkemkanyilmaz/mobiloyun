@@ -323,13 +323,13 @@ class UnoGame {
             const opponentHands = {};
             this.room.players.forEach(p => {
                 if (p.id !== player.id) {
-                    opponentHands[p.id] = this.state.hands[p.id].length; // Only send count
+                    opponentHands[p.id] = this.state.hands[p.id] ? this.state.hands[p.id].length : 0; // Only send count
                 }
             });
 
             const playerState = {
                 phase: this.state.phase,
-                myHand: this.state.hands[player.id],
+                myHand: this.state.hands[player.id] || [],
                 opponentHands: opponentHands,
                 discardTop: this.state.discardPile[this.state.discardPile.length - 1],
                 turnPlayerId: this.room.players[this.state.turnIndex].id,
@@ -341,6 +341,31 @@ class UnoGame {
 
             this.io.to(player.id).emit('gameState', playerState);
         });
+    }
+
+    updatePlayerId(oldPlayerId, newPlayerId) {
+        // Migrate hands
+        if (this.state.hands[oldPlayerId]) {
+            this.state.hands[newPlayerId] = this.state.hands[oldPlayerId];
+            delete this.state.hands[oldPlayerId];
+        }
+
+        // Migrate Uno calls
+        if (this.state.unoCalls[oldPlayerId] !== undefined) {
+            this.state.unoCalls[newPlayerId] = this.state.unoCalls[oldPlayerId];
+            delete this.state.unoCalls[oldPlayerId];
+        }
+
+        // Winner check
+        if (this.state.winner === oldPlayerId) {
+            this.state.winner = newPlayerId;
+        }
+
+        // Note: turnIndex relies on room.players array order, which RoomManager updates.
+        // So we don't need to update turnIndex, just the ID references in state.
+
+        // Re-broadcast to ensure client gets new state with correct ID
+        this.broadcastState();
     }
 }
 
