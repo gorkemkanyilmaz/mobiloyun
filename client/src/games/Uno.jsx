@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import './Uno.css';
 
-function Uno({ room }) {
+function Uno({ room, playerId }) {
     const [gameState, setGameState] = useState(null);
     const [logs, setLogs] = useState([]);
     const [showColorPicker, setShowColorPicker] = useState(false);
@@ -27,7 +27,7 @@ function Uno({ room }) {
     }, []);
 
     const handlePlayCard = (card) => {
-        if (gameState.turnPlayerId !== socket.id) return;
+        if (gameState.turnPlayerId !== playerId) return;
 
         if (card.color === 'black') {
             setPendingCard(card);
@@ -46,7 +46,7 @@ function Uno({ room }) {
     };
 
     const handleDrawCard = () => {
-        if (gameState.turnPlayerId !== socket.id) return;
+        if (gameState.turnPlayerId !== playerId) return;
         socket.emit('gameAction', { type: 'DRAW_CARD' });
     };
 
@@ -56,8 +56,8 @@ function Uno({ room }) {
 
     if (!gameState) return <div className="loading">Uno Yükleniyor...</div>;
 
-    const myPlayer = room.players.find(p => p.id === socket.id);
-    const isMyTurn = gameState.turnPlayerId === socket.id;
+    const myPlayer = room.players.find(p => p.id === playerId);
+    const isMyTurn = gameState.turnPlayerId === playerId;
 
     // Helper to render a single card
     const renderCard = (card, onClick = null, isPlayable = false) => {

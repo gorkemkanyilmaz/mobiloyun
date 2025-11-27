@@ -224,7 +224,7 @@ function App() {
             {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} />}
             {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} />}
             {room?.gameType === 'CHAMELEON' && <Chameleon room={room} />}
-            {room?.gameType === 'UNO' && <Uno room={room} />}
+            {room?.gameType === 'UNO' && <Uno room={room} playerId={localStorage.getItem('ph_playerId') || socket.id} />}
           </div>
         )}
       </main>
