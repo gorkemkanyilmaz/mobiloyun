@@ -323,6 +323,65 @@ class VampirKoylu {
             }
         });
     }
+
+    updatePlayerId(oldId, newId) {
+        // Migrate roles
+        if (this.state.roles[oldId]) {
+            this.state.roles[newId] = this.state.roles[oldId];
+            delete this.state.roles[oldId];
+        }
+
+        // Migrate alive status
+        if (this.state.alive.hasOwnProperty(oldId)) {
+            this.state.alive[newId] = this.state.alive[oldId];
+            delete this.state.alive[oldId];
+        }
+
+        // Migrate votes
+        if (this.state.votes[oldId]) {
+            this.state.votes[newId] = this.state.votes[oldId];
+            delete this.state.votes[oldId];
+        }
+        // Update votes RECEIVED (values in votes object)
+        for (const voterId in this.state.votes) {
+            if (this.state.votes[voterId] === oldId) {
+                this.state.votes[voterId] = newId;
+            }
+        }
+
+        // Migrate night actions
+        if (this.state.nightActions[oldId]) {
+            this.state.nightActions[newId] = this.state.nightActions[oldId];
+            delete this.state.nightActions[oldId];
+        }
+        // Update night actions TARGETS
+        for (const actorId in this.state.nightActions) {
+            if (this.state.nightActions[actorId] === oldId) {
+                this.state.nightActions[actorId] = newId;
+            }
+        }
+
+        // Migrate readyPlayers
+        const readyIndex = this.state.readyPlayers.indexOf(oldId);
+        if (readyIndex !== -1) {
+            this.state.readyPlayers[readyIndex] = newId;
+        }
+
+        // Migrate nightReadyPlayers
+        if (this.state.nightReadyPlayers) {
+            const nightReadyIndex = this.state.nightReadyPlayers.indexOf(oldId);
+            if (nightReadyIndex !== -1) {
+                this.state.nightReadyPlayers[nightReadyIndex] = newId;
+            }
+        }
+
+        // Update doctorLastSaved
+        if (this.state.doctorLastSaved === oldId) {
+            this.state.doctorLastSaved = newId;
+        }
+
+        this.broadcastState();
+    }
 }
 
 module.exports = VampirKoylu;

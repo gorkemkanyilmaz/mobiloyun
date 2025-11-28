@@ -256,6 +256,38 @@ class ChameleonGame {
             this.io.to(player.id).emit('gameState', playerState);
         });
     }
+
+    updatePlayerId(oldId, newId) {
+        // Migrate chameleonId
+        if (this.state.chameleonId === oldId) {
+            this.state.chameleonId = newId;
+        }
+
+        // Migrate firstSpeakerId
+        if (this.state.firstSpeakerId === oldId) {
+            this.state.firstSpeakerId = newId;
+        }
+
+        // Migrate scores
+        if (this.state.scores.hasOwnProperty(oldId)) {
+            this.state.scores[newId] = this.state.scores[oldId];
+            delete this.state.scores[oldId];
+        }
+
+        // Migrate votes
+        if (this.state.votes[oldId]) {
+            this.state.votes[newId] = this.state.votes[oldId];
+            delete this.state.votes[oldId];
+        }
+        // Update votes RECEIVED
+        for (const voterId in this.state.votes) {
+            if (this.state.votes[voterId] === oldId) {
+                this.state.votes[voterId] = newId;
+            }
+        }
+
+        this.broadcastState();
+    }
 }
 
 module.exports = ChameleonGame;
