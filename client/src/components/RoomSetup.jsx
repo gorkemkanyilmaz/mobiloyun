@@ -3,14 +3,17 @@ import React, { useState } from 'react';
 function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
     const [playerName, setPlayerName] = useState('');
     const [roomId, setRoomId] = useState('');
-    const [selectedAvatar, setSelectedAvatar] = useState('Aneka');
+    const [selectedAvatar, setSelectedAvatar] = useState('men/1');
     const [mode, setMode] = useState('MENU'); // MENU, JOIN, CREATE
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Premium seeds for Personas
+    // Real human photos (5 men, 5 women)
     const avatars = [
-        'Aneka', 'Felix', 'Precious', 'Caleb', 'Gracie',
-        'John', 'Mimi', 'Bear', 'Boots', 'Jack'
+        'men/1', 'women/1',
+        'men/2', 'women/2',
+        'men/3', 'women/3',
+        'men/4', 'women/4',
+        'men/5', 'women/5'
     ];
 
     const GAME_NAMES = {
@@ -80,7 +83,7 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
                                 onClick={() => setSelectedAvatar(seed)}
                             >
                                 <img
-                                    src={`https://api.dicebear.com/7.x/personas/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
+                                    src={`https://randomuser.me/api/portraits/${seed}.jpg`}
                                     alt="avatar"
                                 />
                             </div>
