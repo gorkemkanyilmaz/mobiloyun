@@ -216,9 +216,12 @@ button {
 
 .avatar-option img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  aspect-ratio: 1;
   border-radius: 50%;
   display: block;
+  object-fit: cover;
+  object-position: top;
 }
 
 .form-actions {
@@ -272,6 +275,8 @@ button {
   height: 60px;
   border-radius: 50%;
   background-color: #333;
+  object-fit: cover;
+  object-position: top;
 }
 
 .player-info {
