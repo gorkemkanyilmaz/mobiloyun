@@ -16,9 +16,9 @@ function Lobby({ room, currentPlayerId, onReady, onStart, onLeave }) {
                 {room.players.map((player) => (
                     <div key={player.id} className={`player-card ${player.isReady ? 'ready' : ''}`}>
                         <div className="avatar">
-                            {/* Real Photo Avatar */}
+                            {/* Digital Art Avatar */}
                             <img
-                                src={`https://randomuser.me/api/portraits/${player.avatar}.jpg`}
+                                src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${player.avatar}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
                                 alt="avatar"
                             />
                         </div>

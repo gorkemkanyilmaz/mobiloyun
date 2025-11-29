@@ -3,17 +3,14 @@ import React, { useState } from 'react';
 function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
     const [playerName, setPlayerName] = useState('');
     const [roomId, setRoomId] = useState('');
-    const [selectedAvatar, setSelectedAvatar] = useState('men/1');
+    const [selectedAvatar, setSelectedAvatar] = useState('Aneka');
     const [mode, setMode] = useState('MENU'); // MENU, JOIN, CREATE
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Real human photos (5 men, 5 women)
+    // Digital Art / Lorelei seeds (Beautiful drawings)
     const avatars = [
-        'men/1', 'women/1',
-        'men/2', 'women/2',
-        'men/3', 'women/3',
-        'men/4', 'women/4',
-        'men/5', 'women/5'
+        'Aneka', 'Felix', 'Precious', 'Caleb', 'Gracie', 
+        'John', 'Mimi', 'Bear', 'Boots', 'Jack'
     ];
 
     const GAME_NAMES = {
@@ -82,9 +79,9 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
                                 className={`avatar-option ${selectedAvatar === seed ? 'selected' : ''}`}
                                 onClick={() => setSelectedAvatar(seed)}
                             >
-                                <img
-                                    src={`https://randomuser.me/api/portraits/${seed}.jpg`}
-                                    alt="avatar"
+                                <img 
+                                    src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`} 
+                                    alt="avatar" 
                                 />
                             </div>
                         ))}
