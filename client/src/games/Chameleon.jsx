@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import './Chameleon.css';
 
-function Chameleon({ room }) {
+function Chameleon({ room, playerId }) {
     const [gameState, setGameState] = useState(null);
     const [logs, setLogs] = useState([]);
     const [selectedVote, setSelectedVote] = useState(null);

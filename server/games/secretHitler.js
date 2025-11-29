@@ -213,6 +213,39 @@ class SecretHitler {
     broadcastState() {
         this.players.forEach(p => this.sendStateTo(p.id));
     }
+
+    updatePlayerId(oldId, newId) {
+        // Migrate roles
+        if (this.state.roles[oldId]) {
+            this.state.roles[newId] = this.state.roles[oldId];
+            delete this.state.roles[oldId];
+        }
+
+        // Migrate votes
+        if (this.state.votes[oldId] !== undefined) {
+            this.state.votes[newId] = this.state.votes[oldId];
+            delete this.state.votes[oldId];
+        }
+
+        // Migrate Special Roles
+        if (this.state.presidentId === oldId) this.state.presidentId = newId;
+        if (this.state.chancellorId === oldId) this.state.chancellorId = newId;
+        if (this.state.chancellorNomineeId === oldId) this.state.chancellorNomineeId = newId;
+        if (this.state.lastPresidentId === oldId) this.state.lastPresidentId = newId;
+        if (this.state.lastChancellorId === oldId) this.state.lastChancellorId = newId;
+
+        // Migrate Investigation Results (if implemented)
+        if (this.state.investigatedPlayers && this.state.investigatedPlayers.includes(oldId)) {
+            const idx = this.state.investigatedPlayers.indexOf(oldId);
+            this.state.investigatedPlayers[idx] = newId;
+        }
+        if (this.state.confirmedNotHitler && this.state.confirmedNotHitler.includes(oldId)) {
+            const idx = this.state.confirmedNotHitler.indexOf(oldId);
+            this.state.confirmedNotHitler[idx] = newId;
+        }
+
+        this.broadcastState();
+    }
 }
 
 module.exports = SecretHitler;

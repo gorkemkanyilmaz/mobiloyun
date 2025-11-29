@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import './SecretHitler.css';
 
-function SecretHitler({ room }) {
+function SecretHitler({ room, playerId }) {
     const [gameState, setGameState] = useState(null);
     const [logs, setLogs] = useState([]);
 
@@ -39,9 +39,9 @@ function SecretHitler({ room }) {
 
     if (!gameState) return <div className="loading">Oyun Yükleniyor...</div>;
 
-    const myPlayer = room.players.find(p => p.id === socket.id);
-    const isPresident = gameState.presidentId === socket.id;
-    const isChancellor = gameState.chancellorId === socket.id;
+    const myPlayer = room.players.find(p => p.id === playerId);
+    const isPresident = gameState.presidentId === playerId;
+    const isChancellor = gameState.chancellorId === playerId;
 
     return (
         <div className="secret-hitler">

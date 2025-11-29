@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import './VampirKoylu.css';
 
-function VampirKoylu({ room }) {
+function VampirKoylu({ room, playerId }) {
     const [gameState, setGameState] = useState(null);
     const [logs, setLogs] = useState([]);
     const [selectedTarget, setSelectedTarget] = useState(null);
