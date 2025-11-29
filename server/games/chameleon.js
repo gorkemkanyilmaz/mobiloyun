@@ -54,7 +54,16 @@ class ChameleonGame {
                 return;
             }
 
-            const chameleonIndex = Math.floor(Math.random() * players.length);
+            let chameleonIndex;
+            // Try to pick a different chameleon than last time if possible
+            if (players.length > 1 && this.state.chameleonId) {
+                do {
+                    chameleonIndex = Math.floor(Math.random() * players.length);
+                } while (players[chameleonIndex].id === this.state.chameleonId);
+            } else {
+                chameleonIndex = Math.floor(Math.random() * players.length);
+            }
+
             this.state.chameleonId = players[chameleonIndex].id;
 
             // 2. Determine First Speaker

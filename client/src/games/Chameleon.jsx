@@ -88,6 +88,11 @@ function Chameleon({ room, playerId }) {
                             GİZLİ KELİME: <span>{gameState.secretWord}</span>
                         </div>
                     )}
+                    {gameState.phase === 'DISCUSSION' && (
+                        <div className="discussion-timer" style={{ marginTop: '10px', fontSize: '1.2rem', color: '#ffeb3b' }}>
+                            ⏳ {timer}
+                        </div>
+                    )}
                 </div>
             </div>
 
