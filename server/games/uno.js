@@ -30,8 +30,8 @@ class UnoGame {
 
         // Flip first card
         let firstCard = this.state.deck.pop();
-        while (firstCard.color === 'black') {
-            // If first card is Wild, put it back and reshuffle (simple rule to avoid complexity at start)
+        // Ensure first card is a number card (not Wild, Skip, Reverse, Draw2)
+        while (firstCard.color === 'black' || firstCard.type !== 'number') {
             this.state.deck.unshift(firstCard);
             this.shuffleDeck();
             firstCard = this.state.deck.pop();
@@ -43,33 +43,6 @@ class UnoGame {
         this.state.currentValue = firstCard.value;
 
         this.addLog('Oyun başladı! İlk kart: ' + this.formatCard(firstCard));
-
-        // Apply first card effect
-        if (firstCard.type === 'skip') {
-            this.addLog('İlk kart Atla! İlk oyuncunun sırası atlandı.');
-            this.advanceTurn();
-        } else if (firstCard.type === 'reverse') {
-            this.state.direction *= -1;
-            this.addLog('İlk kart Yön Değiştir! Oyun yönü değişti.');
-            if (this.room.players.length === 2) {
-                this.advanceTurn(); // In 2 player, Reverse acts like Skip
-            } else {
-                // For >2 players, the dealer (last player) plays first? 
-                // Standard rules: Dealer is left of start. Play moves left.
-                // If Reverse, play moves right. Dealer plays first.
-                // Current logic: turnIndex 0 is "Start Player".
-                // If Reverse, we need to move turnIndex to the LAST player.
-                // advanceTurn moves based on direction.
-                // If direction is -1. 0 + (-1) = -1 -> Last player.
-                this.advanceTurn(); 
-            }
-        } else if (firstCard.type === 'draw2') {
-            const firstPlayer = this.room.players[this.state.turnIndex];
-            this.addLog(`İlk kart +2! ${firstPlayer.name} 2 kart çekti ve sırası geçti.`);
-            this.drawCards(firstPlayer.id, 2);
-            this.advanceTurn();
-        }
-
         this.broadcastState();
     }
 
