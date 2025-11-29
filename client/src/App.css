@@ -348,35 +348,46 @@ header.compact .status-indicator {
   padding: 0;
   max-width: 100%;
 
-/* Header Layout */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: var(--bg-secondary);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  z-index: 100;
-}
+  /* Header Layout */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--bg-secondary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+  }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
-.exit-btn {
-  background-color: var(--error-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  border-radius: 20px;
-  border: 2px solid transparent;
-  transition: all 0.2s;
-}
+  .exit-btn {
+    background-color: rgba(255, 82, 82, 0.2);
+    color: #ff5252;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    transition: all 0.2s ease;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-.exit-btn:hover {
-  background-color: transparent;
-  border-color: var(--error-color);
-  color: var(--error-color);
-}
+  .exit-btn:hover {
+    background-color: rgba(255, 82, 82, 0.8);
+    color: white;
+    border-color: #ff5252;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+  }
+
+  .exit-btn:active {
+    transform: translateY(0);
+  }

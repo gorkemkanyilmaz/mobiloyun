@@ -17,7 +17,11 @@ function Lobby({ room, currentPlayerId, onReady, onStart, onLeave }) {
                     <div key={player.id} className={`player-card ${player.isReady ? 'ready' : ''}`}>
                         <div className="avatar">
                             {/* Simple avatar placeholder */}
-                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${player.avatar}`} alt="avatar" />
+                            {/* Premium Avatar */}
+                            <img
+                                src={`https://api.dicebear.com/7.x/personas/svg?seed=${player.avatar}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
+                                alt="avatar"
+                            />
                         </div>
                         <div className="player-info">
                             <span className="player-name">{player.name} {player.id === currentPlayerId ? '(Sen)' : ''}</span>
