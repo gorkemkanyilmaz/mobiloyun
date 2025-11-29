@@ -195,9 +195,16 @@ function App() {
   return (
     <div className="app-container">
       <header className={view === 'GAME' ? 'compact' : ''}>
-        <h1 onClick={() => setView('MENU')} style={{ cursor: 'pointer' }}>PartyHub</h1>
-        <div className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
-          {isConnected ? 'Online' : 'Offline'}
+        <div className="header-left">
+          <h1 onClick={() => setView('MENU')} style={{ cursor: 'pointer' }}>PartyHub</h1>
+        </div>
+        <div className="header-right">
+          {view !== 'MENU' && (
+            <button className="exit-btn" onClick={handleLeaveRoom}>Oyundan Çık</button>
+          )}
+          <div className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
+            {isConnected ? 'Online' : 'Offline'}
+          </div>
         </div>
       </header>
 

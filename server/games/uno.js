@@ -42,11 +42,34 @@ class UnoGame {
         this.state.currentType = firstCard.type;
         this.state.currentValue = firstCard.value;
 
-        // Apply first card effect if it's special (Skip, Reverse, Draw 2)
-        // For simplicity in this version, we treat the first card as just a starter, 
-        // but strictly speaking Reverse/Skip should apply. Let's keep it simple for now.
-
         this.addLog('Oyun başladı! İlk kart: ' + this.formatCard(firstCard));
+
+        // Apply first card effect
+        if (firstCard.type === 'skip') {
+            this.addLog('İlk kart Atla! İlk oyuncunun sırası atlandı.');
+            this.advanceTurn();
+        } else if (firstCard.type === 'reverse') {
+            this.state.direction *= -1;
+            this.addLog('İlk kart Yön Değiştir! Oyun yönü değişti.');
+            if (this.room.players.length === 2) {
+                this.advanceTurn(); // In 2 player, Reverse acts like Skip
+            } else {
+                // For >2 players, the dealer (last player) plays first? 
+                // Standard rules: Dealer is left of start. Play moves left.
+                // If Reverse, play moves right. Dealer plays first.
+                // Current logic: turnIndex 0 is "Start Player".
+                // If Reverse, we need to move turnIndex to the LAST player.
+                // advanceTurn moves based on direction.
+                // If direction is -1. 0 + (-1) = -1 -> Last player.
+                this.advanceTurn(); 
+            }
+        } else if (firstCard.type === 'draw2') {
+            const firstPlayer = this.room.players[this.state.turnIndex];
+            this.addLog(`İlk kart +2! ${firstPlayer.name} 2 kart çekti ve sırası geçti.`);
+            this.drawCards(firstPlayer.id, 2);
+            this.advanceTurn();
+        }
+
         this.broadcastState();
     }
 
