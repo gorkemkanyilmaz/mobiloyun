@@ -244,10 +244,10 @@ function App() {
 
         {view === 'GAME' && (
           <div className="game-wrapper">
-            {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} />}
-            {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} />}
-            {room?.gameType === 'CHAMELEON' && <Chameleon room={room} />}
-            {room?.gameType === 'UNO' && <Uno room={room} playerId={localStorage.getItem('ph_playerId') || socket.id} />}
+            {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} playerId={socket.id} />}
+            {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} playerId={socket.id} />}
+            {room?.gameType === 'CHAMELEON' && <Chameleon room={room} playerId={socket.id} />}
+            {room?.gameType === 'UNO' && <Uno room={room} playerId={socket.id} />}
           </div>
         )}
       </main>
