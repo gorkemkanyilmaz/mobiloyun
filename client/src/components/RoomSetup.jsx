@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
     const [playerName, setPlayerName] = useState('');
     const [roomId, setRoomId] = useState('');
-    const [selectedAvatar, setSelectedAvatar] = useState('woman_1');
+    const [selectedAvatar, setSelectedAvatar] = useState('1');
     const [mode, setMode] = useState('MENU'); // MENU, JOIN, CREATE
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Custom User Avatars (5 men, 5 women)
+    // Custom User Avatars (1-10)
     const avatars = [
-        'woman_1', 'woman_2', 'woman_3', 'woman_4', 'woman_5',
-        'man_1', 'man_2', 'man_3', 'man_4', 'man_5'
+        '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', '10'
     ];
 
     const GAME_NAMES = {
