@@ -162,7 +162,7 @@ function VampirKoylu({ room, playerId }) {
                                 onClick={() => pAlive && !isMe && isMyTurn && gameState.phase !== 'ROLE_REVEAL' && !showNightReadyBtn ? setSelectedTarget(p.id) : null}
                             >
                                 <div className="avatar">
-                                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${p.avatar}`} alt="avatar" />
+                                    <img src={`/avatars/avatar_${p.avatar}.png`} alt="avatar" />
                                     {!pAlive && <div className="dead-overlay">💀</div>}
                                     {statusBadge && <div className="status-badge">{statusBadge}</div>}
                                     {gameState.phase === 'VOTING' && (

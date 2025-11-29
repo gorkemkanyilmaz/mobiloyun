@@ -96,7 +96,7 @@ function Uno({ room, playerId }) {
                     return (
                         <div key={p.id} className={`opponent ${isTurn ? 'turn' : ''}`}>
                             <div className="avatar">
-                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${p.avatar}`} alt="avatar" />
+                                <img src={`/avatars/avatar_${p.avatar}.png`} alt="avatar" />
                                 <div className="card-count-badge">{cardCount}</div>
                             </div>
                             <div className="name">{p.name}</div>

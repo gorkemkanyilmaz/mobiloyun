@@ -127,7 +127,7 @@ function Chameleon({ room, playerId }) {
                                     onClick={() => gameState.phase === 'VOTING' && !isMe ? setSelectedVote(p.id) : null}
                                 >
                                     <div className="avatar">
-                                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${p.avatar}`} alt="avatar" />
+                                        <img src={`/avatars/avatar_${p.avatar}.png`} alt="avatar" />
                                         {voteCount > 0 && <div className="vote-badge">{voteCount}</div>}
                                         {isFirstSpeaker && <div className="speaker-badge" title="İlk Konuşmacı">📢</div>}
                                     </div>
