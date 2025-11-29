@@ -199,12 +199,15 @@ function App() {
           <h1 onClick={() => setView('MENU')} style={{ cursor: 'pointer' }}>PartyHub</h1>
         </div>
         <div className="header-right">
+          {view !== 'MENU' && (
+            <button className="exit-btn" onClick={handleLeaveRoom}>
+              <span className="icon">🚪</span> Çık
+            </button>
+          )}
           <div className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
+            <span className="dot"></span>
             {isConnected ? 'Online' : 'Offline'}
           </div>
-          {view !== 'MENU' && (
-            <button className="exit-btn" onClick={handleLeaveRoom}>Oyundan Çık</button>
-          )}
         </div>
       </header>
 
