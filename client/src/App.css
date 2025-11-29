@@ -208,6 +208,17 @@ button {
   aspect-ratio: 1;
 }
 
+.avatar-option:hover {
+  transform: scale(1.05);
+}
+
+.avatar-option.selected {
+  border-color: #00e676;
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+  transform: scale(1.1);
+  border-width: 3px;
+}
+
 .avatar-option img {
   width: 100%;
   height: 100%;
