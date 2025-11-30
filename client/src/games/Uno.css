@@ -34,23 +34,9 @@
     transform: scale(0.75);
 }
 
-.opponent.turn {
-    opacity: 1;
-    transform: scale(0.9);
-}
-
-.opponent .avatar {
-    position: relative;
-    width: 35px;
-    height: 35px;
-}
-
-.opponent .avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid transparent;
+border-radius: 50%;
+background: #fff;
+border: 2px solid transparent;
 }
 
 .opponent.turn .avatar img {
