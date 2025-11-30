@@ -51,7 +51,7 @@ class MonopolyDeal {
         const add = (type, subType, value, count, color1 = null, color2 = null) => {
             for (let i = 0; i < count; i++) {
                 cards.push({
-                    id: \`card_\${cards.length}\`,
+                    id: `card_${cards.length}`,
                     type, // PROPERTY, MONEY, ACTION, RENT
                     subType, // NAME (e.g., "Deal Breaker", "Blue Property")
                     value, // Monetary value
@@ -142,11 +142,11 @@ class MonopolyDeal {
 
     startTurn() {
         this.state.actionsRemaining = this.CONSTANTS.ACTIONS_PER_TURN;
-        
+
         // Draw 2 cards (or 5 if hand empty)
         const player = this.state.players[this.state.turnPlayerId];
         const drawCount = player.hand.length === 0 ? 5 : 2;
-        
+
         for (let i = 0; i < drawCount; i++) {
             if (this.state.deck.length === 0) {
                 this.reshuffleDiscard();
@@ -197,7 +197,7 @@ class MonopolyDeal {
             // Money, Action, Rent, House/Hotel can be banked
             if (card.type !== 'PROPERTY') {
                 player.bank.push(card);
-                this.log(`${ player.name } bankaya ${ card.value }M yatırdı.`);
+                this.log(`${player.name} bankaya ${card.value}M yatırdı.`);
             } else {
                 actionSuccessful = false;
             }
@@ -209,7 +209,7 @@ class MonopolyDeal {
                 const color = opts.color || card.color1; // For wilds, user chooses
                 if (!player.properties[color]) player.properties[color] = [];
                 player.properties[color].push(card);
-                this.log(`${ player.name } ${ color } setine kart ekledi.`);
+                this.log(`${player.name} ${color} setine kart ekledi.`);
             } else {
                 actionSuccessful = false;
             }
@@ -218,7 +218,7 @@ class MonopolyDeal {
             if (card.type === 'ACTION' || card.type === 'RENT') {
                 this.resolveActionEffect(pid, card, opts);
                 this.state.discardPile.push(card); // Actions go to discard after use
-                this.log(`${ player.name } ${ card.subType } oynadı!`);
+                this.log(`${player.name} ${card.subType} oynadı!`);
             } else {
                 actionSuccessful = false;
             }
@@ -239,7 +239,7 @@ class MonopolyDeal {
         // For MVP, just logging.
         if (card.subType === 'Pass Go') {
             const player = this.state.players[pid];
-            for(let i=0; i<2; i++) {
+            for (let i = 0; i < 2; i++) {
                 if (this.state.deck.length === 0) this.reshuffleDiscard();
                 if (this.state.deck.length > 0) player.hand.push(this.state.deck.shift());
             }
@@ -312,7 +312,7 @@ class MonopolyDeal {
     broadcastState() {
         this.players.forEach(p => this.sendStateTo(p.id));
     }
-    
+
     updatePlayerId(oldId, newId) {
         if (this.state.players[oldId]) {
             this.state.players[newId] = this.state.players[oldId];

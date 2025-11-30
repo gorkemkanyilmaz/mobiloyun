@@ -32,31 +32,6 @@ class GameHandler {
         // Actually, looking at Chameleon it takes (room, io).
         // Let's check VampirKoylu constructor signature if possible, but for now pass (room, io) as it's the cleaner new pattern.
         // If legacy games fail, we will fix them.
-
-        // Wait, previous gameHandler passed: new VampirKoylu(this.io, room.id, room.players);
-        // Chameleon expects: new ChameleonGame(room, this.io);
-        // I should standardize or handle both.
-
-        let gameInstance;
-        if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO' || room.gameType === 'MONOPOLY_DEAL') {
-            gameInstance = new GameClass(this.io, room.id, room.players); // Wait, my new class uses (io, roomId, players)
-            // Actually, let's check my MonopolyDeal constructor: constructor(io, roomId, players)
-            // So it matches the OLD pattern, not the new (room, io) pattern of Chameleon/Uno.
-            // I should have made it consistent.
-            // Let's fix the instantiation here to match the constructor I just wrote.
-        } else {
-            // Legacy support for Vampir/SecretHitler
-            if (room.gameType === 'VAMPIR_KOYLU' || room.gameType === 'SECRET_HITLER' || room.gameType === 'MONOPOLY_DEAL') {
-                gameInstance = new GameClass(this.io, room.id, room.players);
-            } else {
-                gameInstance = new GameClass(room, this.io);
-            }
-        }
-
-        if (gameInstance) {
-            this.games.set(room.id, gameInstance);
-            console.log(`Initialized game ${room.gameType} for room ${room.id}`);
-        }
     }
 
     handleAction(socket, action) {
