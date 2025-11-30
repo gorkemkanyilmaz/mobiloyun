@@ -2,7 +2,6 @@ const VampirKoylu = require('./games/vampirKoylu');
 const SecretHitler = require('./games/secretHitler');
 const ChameleonGame = require('./games/chameleon');
 const UnoGame = require('./games/uno');
-const MonopolyDeal = require('./games/monopolyDeal');
 
 class GameHandler {
     constructor(io, roomManager) {
@@ -13,8 +12,7 @@ class GameHandler {
             'VAMPIR_KOYLU': VampirKoylu,
             'SECRET_HITLER': SecretHitler,
             'CHAMELEON': ChameleonGame,
-            'UNO': UnoGame,
-            'MONOPOLY_DEAL': MonopolyDeal
+            'UNO': UnoGame
         };
     }
 
@@ -25,15 +23,33 @@ class GameHandler {
             return;
         }
 
+        // Initialize game with room and io
+        // Note: Existing games expect (io, roomId, players) or (room, io)
+        // Let's check consistency. VampirKoylu and SecretHitler likely updated to take (room, io) or we need to adapt.
+        // Based on previous files, they were refactored. Let's assume (room, io) or adapt.
+        // Actually, looking at Chameleon it takes (room, io).
+        // Let's check VampirKoylu constructor signature if possible, but for now pass (room, io) as it's the cleaner new pattern.
+        // If legacy games fail, we will fix them.
+
+        // Wait, previous gameHandler passed: new VampirKoylu(this.io, room.id, room.players);
+        // Chameleon expects: new ChameleonGame(room, this.io);
+        // I should standardize or handle both.
+
         let gameInstance;
-        // Check game type to determine constructor signature
         if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO') {
-            // New signature: (room, io)
             gameInstance = new GameClass(room, this.io);
         } else {
-            // Legacy signature: (io, roomId, players)
-            // Used by: VAMPIR_KOYLU, SECRET_HITLER, MONOPOLY_DEAL
-            gameInstance = new GameClass(this.io, room.id, room.players);
+            // Legacy support for Vampir/SecretHitler if they haven't been updated to new signature
+            // But wait, I didn't update VampirKoylu constructor recently.
+            // Let's stick to the old signature for them if needed, or better, pass both styles?
+            // Actually, let's look at the previous gameHandler.js content in step 493 diff.
+            // It had: gameInstance = new VampirKoylu(this.io, room.id, room.players);
+
+            if (room.gameType === 'VAMPIR_KOYLU' || room.gameType === 'SECRET_HITLER') {
+                gameInstance = new GameClass(this.io, room.id, room.players);
+            } else {
+                gameInstance = new GameClass(room, this.io);
+            }
         }
 
         if (gameInstance) {

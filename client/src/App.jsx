@@ -7,7 +7,6 @@ import VampirKoylu from './games/VampirKoylu';
 import SecretHitler from './games/SecretHitler';
 import Chameleon from './games/Chameleon';
 import Uno from './games/Uno';
-import MonopolyDeal from './games/MonopolyDeal';
 import GamePausedOverlay from './components/GamePausedOverlay';
 import ReconnectingOverlay from './components/ReconnectingOverlay';
 import './App.css';
@@ -252,7 +251,6 @@ function App() {
             {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} playerId={socket.id} />}
             {room?.gameType === 'CHAMELEON' && <Chameleon room={room} playerId={socket.id} />}
             {room?.gameType === 'UNO' && <Uno room={room} playerId={socket.id} />}
-            {room?.gameType === 'MONOPOLY_DEAL' && <MonopolyDeal room={room} playerId={socket.id} />}
           </div>
         )}
       </main>
