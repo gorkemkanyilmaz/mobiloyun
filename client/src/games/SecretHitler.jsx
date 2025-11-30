@@ -87,7 +87,7 @@ function SecretHitler({ room, playerId }) {
                     </div>
                 )}
 
-                {gameState.phase === 'VOTING' && !gameState.votes[socket.id] && (
+                {gameState.phase === 'VOTING' && gameState.votes[socket.id] === undefined && (
                     <div className="voting-booth">
                         <h3>Şansölye Adayı: {room.players.find(p => p.id === gameState.chancellorNomineeId)?.name}</h3>
                         <div className="vote-buttons">
