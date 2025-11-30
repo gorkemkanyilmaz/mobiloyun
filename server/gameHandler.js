@@ -2,6 +2,7 @@ const VampirKoylu = require('./games/vampirKoylu');
 const SecretHitler = require('./games/secretHitler');
 const ChameleonGame = require('./games/chameleon');
 const UnoGame = require('./games/uno');
+const MonopolyDeal = require('./games/monopolyDeal');
 
 class GameHandler {
     constructor(io, roomManager) {
@@ -12,7 +13,8 @@ class GameHandler {
             'VAMPIR_KOYLU': VampirKoylu,
             'SECRET_HITLER': SecretHitler,
             'CHAMELEON': ChameleonGame,
-            'UNO': UnoGame
+            'UNO': UnoGame,
+            'MONOPOLY_DEAL': MonopolyDeal
         };
     }
 
@@ -36,16 +38,15 @@ class GameHandler {
         // I should standardize or handle both.
 
         let gameInstance;
-        if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO') {
-            gameInstance = new GameClass(room, this.io);
+        if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO' || room.gameType === 'MONOPOLY_DEAL') {
+            gameInstance = new GameClass(this.io, room.id, room.players); // Wait, my new class uses (io, roomId, players)
+            // Actually, let's check my MonopolyDeal constructor: constructor(io, roomId, players)
+            // So it matches the OLD pattern, not the new (room, io) pattern of Chameleon/Uno.
+            // I should have made it consistent.
+            // Let's fix the instantiation here to match the constructor I just wrote.
         } else {
-            // Legacy support for Vampir/SecretHitler if they haven't been updated to new signature
-            // But wait, I didn't update VampirKoylu constructor recently.
-            // Let's stick to the old signature for them if needed, or better, pass both styles?
-            // Actually, let's look at the previous gameHandler.js content in step 493 diff.
-            // It had: gameInstance = new VampirKoylu(this.io, room.id, room.players);
-
-            if (room.gameType === 'VAMPIR_KOYLU' || room.gameType === 'SECRET_HITLER') {
+            // Legacy support for Vampir/SecretHitler
+            if (room.gameType === 'VAMPIR_KOYLU' || room.gameType === 'SECRET_HITLER' || room.gameType === 'MONOPOLY_DEAL') {
                 gameInstance = new GameClass(this.io, room.id, room.players);
             } else {
                 gameInstance = new GameClass(room, this.io);
