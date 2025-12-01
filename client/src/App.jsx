@@ -213,7 +213,7 @@ function App() {
 
       {error && <div className="error-toast">{error}</div>}
       {!isConnected && view !== 'MENU' && <ReconnectingOverlay />}
-      {isConnected && pausedBy && <GamePausedOverlay pausedBy={pausedBy} />}
+      {isConnected && pausedBy && <GamePausedOverlay pausedBy={pausedBy} onLeave={handleLeaveRoom} />}
 
       <main>
         {view === 'MENU' && (

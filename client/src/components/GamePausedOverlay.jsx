@@ -1,14 +1,17 @@
 import React from 'react';
 import './GamePausedOverlay.css';
 
-function GamePausedOverlay({ pausedBy }) {
+function GamePausedOverlay({ pausedBy, onLeave }) {
     return (
-        <div className="paused-overlay">
+        <div className="game-paused-overlay">
             <div className="paused-content">
-                <div className="spinner">⏸</div>
-                <h2>OYUN DURAKLATILDI</h2>
-                <p><strong>{pausedBy}</strong> bağlantısı koptu.</p>
-                <p>1 dakika içinde bağlanmazsa oyun iptal edilecek.</p>
+                <div className="spinner"></div>
+                <h2>Oyun Duraklatıldı</h2>
+                <p>{pausedBy} oyundan ayrıldı.</p>
+                <p>Tekrar bağlanması bekleniyor...</p>
+                <button className="leave-game-btn" onClick={onLeave}>
+                    Oyundan Çık
+                </button>
             </div>
         </div>
     );
