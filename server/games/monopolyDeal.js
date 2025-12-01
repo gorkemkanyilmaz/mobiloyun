@@ -1,8 +1,8 @@
 class MonopolyDeal {
-    constructor(io, roomId, players) {
+    constructor(room, io) {
         this.io = io;
-        this.roomId = roomId;
-        this.players = players;
+        this.roomId = room.id;
+        this.players = room.players;
         this.state = {
             phase: 'TURN', // TURN, PAYMENT, DISCARD, END
             turnPlayerId: null,
