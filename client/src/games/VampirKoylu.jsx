@@ -7,6 +7,7 @@ function VampirKoylu({ room, playerId }) {
     const [logs, setLogs] = useState([]);
     const [selectedTarget, setSelectedTarget] = useState(null);
     const [timer, setTimer] = useState(0);
+    const [warningMessage, setWarningMessage] = useState('');
 
     useEffect(() => {
         socket.on('gameState', (state) => {
@@ -43,6 +44,15 @@ function VampirKoylu({ room, playerId }) {
 
     const handleAction = () => {
         if (selectedTarget) {
+            // Client-side validation: Doctor cannot protect same person twice in a row
+            if (gameState.phase === 'NIGHT' && gameState.myRole === 'DOKTOR' &&
+                selectedTarget === gameState.doctorLastSaved) {
+                setWarningMessage('Bir önceki tur kurtardığın kişiyi tekrar kurtaramazsın!');
+                setSelectedTarget(null);
+                setTimeout(() => setWarningMessage(''), 3000);
+                return;
+            }
+
             if (gameState.phase === 'VOTING') {
                 socket.emit('gameAction', { type: 'VOTE', targetId: selectedTarget });
             } else if (gameState.phase === 'NIGHT') {
@@ -155,11 +165,16 @@ function VampirKoylu({ room, playerId }) {
                             }
                         }
 
+                        // Allow self-selection for night actions (Vampire, Doctor) but not for voting
+                        const canSelect = pAlive && isMyTurn && gameState.phase !== 'ROLE_REVEAL' && !showNightReadyBtn;
+                        const cannotSelectSelf = gameState.phase === 'VOTING' && isMe; // Can't vote for yourself
+                        const isClickable = canSelect && !cannotSelectSelf;
+
                         return (
                             <div
                                 key={p.id}
                                 className={`player-token ${pAlive ? 'alive' : 'dead'} ${isSelected ? 'selected' : ''}`}
-                                onClick={() => pAlive && !isMe && isMyTurn && gameState.phase !== 'ROLE_REVEAL' && !showNightReadyBtn ? setSelectedTarget(p.id) : null}
+                                onClick={() => isClickable ? setSelectedTarget(p.id) : null}
                             >
                                 <div className="avatar">
                                     <img src={`/avatars/avatar_${p.avatar}.png`} alt="avatar" />
@@ -178,6 +193,7 @@ function VampirKoylu({ room, playerId }) {
             </div>
 
             <div className="action-area">
+                {warningMessage && <div className="warning-message">{warningMessage}</div>}
                 {gameState.phase === 'END' ? (
                     <div className="game-over">
                         <h3>KAZANAN: {gameState.logs[gameState.logs.length - 1]?.message.split(': ')[1]}</h3>
