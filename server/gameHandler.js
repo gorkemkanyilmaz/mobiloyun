@@ -2,6 +2,7 @@ const VampirKoylu = require('./games/vampirKoylu');
 const SecretHitler = require('./games/secretHitler');
 const ChameleonGame = require('./games/chameleon');
 const UnoGame = require('./games/uno');
+const KimDahaYakin = require('./games/kimdahaYakin');
 
 class GameHandler {
     constructor(io, roomManager) {
@@ -12,7 +13,8 @@ class GameHandler {
             'VAMPIR_KOYLU': VampirKoylu,
             'SECRET_HITLER': SecretHitler,
             'CHAMELEON': ChameleonGame,
-            'UNO': UnoGame
+            'UNO': UnoGame,
+            'KIM_DAHA_YAKIN': KimDahaYakin
         };
     }
 
@@ -36,7 +38,7 @@ class GameHandler {
         // I should standardize or handle both.
 
         let gameInstance;
-        if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO') {
+        if (room.gameType === 'CHAMELEON' || room.gameType === 'UNO' || room.gameType === 'KIM_DAHA_YAKIN') {
             gameInstance = new GameClass(room, this.io);
         } else {
             // Legacy support for Vampir/SecretHitler if they haven't been updated to new signature

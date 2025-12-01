@@ -1,0 +1,231 @@
+.kim-daha-yakin {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.round-info {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.timer {
+    font-size: 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.question-phase {
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.category-badge {
+    display: inline-block;
+    background: #ffd700;
+    color: #333;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.question-text {
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.answer-input {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.answer-input input {
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.answer-input button {
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    background: #ffd700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.answer-input button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+}
+
+.waiting {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    opacity: 0.8;
+}
+
+.reveal-phase {
+    animation: flipIn 0.5s ease-out;
+}
+
+@keyframes flipIn {
+    from {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: rotateY(0);
+        opacity: 1;
+    }
+}
+
+.correct-answer {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.correct-answer span {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.correct-answer h2 {
+    font-size: 4rem;
+    color: #ffd700;
+    margin: 1rem 0;
+    animation: glow 1s ease-in-out infinite;
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 20px #ffd700;
+    }
+
+    50% {
+        text-shadow: 0 0 40px #ffd700, 0 0 60px #ffd700;
+    }
+}
+
+.guesses-list {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.guess-item {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 2rem;
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.guess-item.winner {
+    background: linear-gradient(90deg, #ffd700, #ffed4e);
+    color: #333;
+    font-weight: bold;
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+}
+
+.scoreboard {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 10px;
+    min-width: 200px;
+}
+
+.player-score {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+}
+
+.player-score.me {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.end-phase {
+    text-align: center;
+}
+
+.end-phase h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.final-scores {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.score-item.champion {
+    background: linear-gradient(90deg, #ffd700, #ffed4e);
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
