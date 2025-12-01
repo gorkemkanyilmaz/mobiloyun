@@ -187,6 +187,7 @@ function App() {
     socket.disconnect();
     localStorage.removeItem('ph_roomId');
     localStorage.removeItem('ph_playerId');
+    setPausedBy(null); // Clear pause state to prevent overlay from reappearing
     socket.connect(); // Reconnect to get fresh socket ID
     setView('MENU');
     setRoom(null);
