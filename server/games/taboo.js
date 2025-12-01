@@ -17,6 +17,7 @@ class Taboo {
         };
         this.cards = this.createCards();
         this.timer = null;
+        this.initGame();
     }
 
     createCards() {
