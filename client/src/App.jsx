@@ -8,6 +8,7 @@ import SecretHitler from './games/SecretHitler';
 import Chameleon from './games/Chameleon';
 import Uno from './games/Uno';
 import KimDahaYakin from './games/KimDahaYakin';
+import Taboo from './games/Taboo';
 import GamePausedOverlay from './components/GamePausedOverlay';
 import ReconnectingOverlay from './components/ReconnectingOverlay';
 import './App.css';
@@ -254,6 +255,7 @@ function App() {
             {room?.gameType === 'CHAMELEON' && <Chameleon room={room} playerId={socket.id} />}
             {room?.gameType === 'UNO' && <Uno room={room} playerId={socket.id} />}
             {room?.gameType === 'KIM_DAHA_YAKIN' && <KimDahaYakin room={room} playerId={socket.id} />}
+            {room?.gameType === 'TABOO' && <Taboo room={room} playerId={socket.id} />}
           </div>
         )}
       </main>

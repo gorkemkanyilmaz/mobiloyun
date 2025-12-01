@@ -1,0 +1,322 @@
+.taboo-game {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 2rem;
+}
+
+.team-setup {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.team-setup h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.teams-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.team {
+    flex: 1;
+    max-width: 400px;
+    padding: 2rem;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.team.mavi {
+    border: 3px solid #2196F3;
+}
+
+.team.kirmizi {
+    border: 3px solid #F44336;
+}
+
+.team h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.team-players {
+    min-height: 150px;
+    margin: 1rem 0;
+}
+
+.player-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.team button {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.team.mavi button {
+    background: #2196F3;
+    color: white;
+}
+
+.team.kirmizi button {
+    background: #F44336;
+    color: white;
+}
+
+.start-btn {
+    padding: 1rem 3rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.round-start {
+    text-align: center;
+    padding: 4rem;
+}
+
+.round-start h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.countdown {
+    font-size: 4rem;
+    animation: pulse 1s infinite;
+}
+
+.playing {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.team-indicator {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.team-indicator.mavi {
+    background: #2196F3;
+}
+
+.team-indicator.kirmizi {
+    background: #F44336;
+}
+
+.timer {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    animation: pulse 1s infinite;
+}
+
+.scores {
+    font-size: 2rem;
+}
+
+.scores .mavi {
+    color: #2196F3;
+}
+
+.scores .kirmizi {
+    color: #F44336;
+}
+
+.card {
+    background: white;
+    color: #333;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: flipIn 0.5s;
+}
+
+@keyframes flipIn {
+    from {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: rotateY(0);
+        opacity: 1;
+    }
+}
+
+.main-word {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #1e3c72;
+}
+
+.forbidden-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.forbidden {
+    background: #ffebee;
+    color: #c62828;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    text-decoration: line-through;
+    font-weight: bold;
+}
+
+.waiting-message {
+    text-align: center;
+    padding: 4rem;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.controls button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.bildi-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.bildi-btn:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.pas-btn {
+    background: #FF9800;
+    color: white;
+}
+
+.pas-btn:hover:not(:disabled) {
+    background: #e68900;
+    transform: scale(1.05);
+}
+
+.pas-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.hatali-btn {
+    background: #F44336;
+    color: white;
+}
+
+.hatali-btn:hover {
+    background: #da190b;
+    transform: scale(1.05);
+}
+
+.round-score {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.round-end,
+.game-end {
+    text-align: center;
+    padding: 4rem;
+}
+
+.round-end h2,
+.game-end h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.summary {
+    margin: 2rem 0;
+}
+
+.scores-display {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.team-score {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-size: 1.5rem;
+}
+
+.team-score.mavi {
+    background: #2196F3;
+}
+
+.team-score.kirmizi {
+    background: #F44336;
+}
+
+.next-btn {
+    padding: 1rem 3rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
