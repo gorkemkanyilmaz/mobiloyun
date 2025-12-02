@@ -8,6 +8,10 @@ const GameHandler = require('./gameHandler');
 const app = express();
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send('PartyHub Server is Running!');
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
