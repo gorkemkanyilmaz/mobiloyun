@@ -159,3 +159,84 @@
         transform: scale(1.05);
     }
 }
+/* Early Vote and Play Again Button Styles */
+.vote-skip-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.vote-skip-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.vote-skip-btn.ready {
+    background: #03dac6;
+    cursor: default;
+}
+
+.vote-skip-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.end-game-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.play-again-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.play-again-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+}
+
+.play-again-btn.ready {
+    background: #ffd700;
+    color: #333;
+}
+
+.play-again-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.exit-game-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background: rgba(255, 82, 82, 0.9);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.exit-game-btn:hover {
+    background: rgba(255, 82, 82, 1);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 82, 82, 0.4);
+}

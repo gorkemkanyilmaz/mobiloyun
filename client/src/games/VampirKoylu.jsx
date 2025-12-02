@@ -42,6 +42,14 @@ function VampirKoylu({ room, playerId }) {
         socket.emit('gameAction', { type: 'NIGHT_READY' });
     };
 
+    const handleReadyToVote = () => {
+        socket.emit('gameAction', { type: 'READY_TO_VOTE' });
+    };
+
+    const handlePlayAgain = () => {
+        socket.emit('gameAction', { type: 'PLAY_AGAIN' });
+    };
+
     const handleAction = () => {
         if (selectedTarget) {
             // Client-side validation: Doctor cannot protect same person twice in a row
@@ -64,8 +72,8 @@ function VampirKoylu({ room, playerId }) {
 
     if (!gameState) return <div className="loading">Oyun Yükleniyor...</div>;
 
-    const myPlayer = room.players.find(p => p.id === socket.id);
-    const isAlive = gameState.alive[socket.id];
+    const myPlayer = room.players.find(p => p.id === playerId);
+    const isAlive = gameState.alive[playerId];
 
     // Determine if it's my turn
     let isMyTurn = false;
@@ -74,21 +82,21 @@ function VampirKoylu({ room, playerId }) {
 
     if (isAlive) {
         if (gameState.phase === 'ROLE_REVEAL') {
-            isMyTurn = !gameState.readyPlayers.includes(socket.id);
+            isMyTurn = !gameState.readyPlayers.includes(playerId);
             actionPrompt = "Rolünü anladıysan Hazırım de.";
         } else if (gameState.phase === 'VOTING') {
-            isMyTurn = !gameState.votes[socket.id];
+            isMyTurn = !gameState.votes[playerId];
             actionPrompt = "Şüpheliyi oyla!";
         } else if (gameState.phase === 'NIGHT') {
             if (gameState.myRole === 'VAMPIR') {
-                isMyTurn = !gameState.nightActions[socket.id];
+                isMyTurn = !gameState.nightActions[playerId];
                 actionPrompt = "Bu gece kimi öldürmek istiyorsun?";
             } else if (gameState.myRole === 'DOKTOR') {
-                isMyTurn = !gameState.nightActions[socket.id];
+                isMyTurn = !gameState.nightActions[playerId];
                 actionPrompt = "Bu gece kimi kurtarmak istiyorsun? (Bir önceki gece kurtardığın kişiyi tekrar kurtaramazsın)";
             } else if (gameState.myRole === 'KOYLU') {
                 // Villager night logic
-                showNightReadyBtn = gameState.nightReadyPlayers && !gameState.nightReadyPlayers.includes(socket.id);
+                showNightReadyBtn = gameState.nightReadyPlayers && !gameState.nightReadyPlayers.includes(playerId);
             }
         }
     }
@@ -129,7 +137,7 @@ function VampirKoylu({ room, playerId }) {
                 <div className="players-grid">
                     {room.players.map(p => {
                         const pAlive = gameState.alive[p.id];
-                        const isMe = p.id === socket.id;
+                        const isMe = p.id === playerId;
                         const isSelected = selectedTarget === p.id;
 
                         // Show votes/actions if applicable
@@ -159,7 +167,7 @@ function VampirKoylu({ room, playerId }) {
                             // Show checkmark for ready villagers
                             if (gameState.nightReadyPlayers && gameState.nightReadyPlayers.includes(p.id)) {
                                 // Only show for self
-                                if (p.id === socket.id) {
+                                if (p.id === playerId) {
                                     statusBadge = '✅';
                                 }
                             }
@@ -197,7 +205,28 @@ function VampirKoylu({ room, playerId }) {
                 {gameState.phase === 'END' ? (
                     <div className="game-over">
                         <h3>KAZANAN: {gameState.logs[gameState.logs.length - 1]?.message.split(': ')[1]}</h3>
-                        <button onClick={() => window.location.reload()}>Ana Menüye Dön</button>
+                        <div className="end-game-buttons">
+                            <button
+                                onClick={handlePlayAgain}
+                                className={`play-again-btn ${gameState.playAgainReady?.includes(playerId) ? 'ready' : ''}`}
+                                disabled={gameState.playAgainReady?.includes(playerId)}
+                            >
+                                {gameState.playAgainReady?.includes(playerId) ?
+                                    '✓ Yeni Tur İçin Hazırsın' :
+                                    `Yeni Tur Başlat (${gameState.playAgainReady?.length || 0}/${room.players.length})`
+                                }
+                            </button>
+                            <button onClick={() => {
+                                // Disconnect socket and clear storage like header exit button
+                                socket.disconnect();
+                                localStorage.removeItem('ph_roomId');
+                                localStorage.removeItem('ph_playerId');
+                                socket.connect();
+                                window.location.href = '/';
+                            }} className="exit-game-btn">
+                                Oyundan Çık
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <>
@@ -241,6 +270,18 @@ function VampirKoylu({ room, playerId }) {
                         {gameState.phase === 'DAY' && (
                             <div className="day-info">
                                 <p>Tartışma Süresi: {timer} saniye</p>
+                                {isAlive && (
+                                    <button
+                                        onClick={handleReadyToVote}
+                                        className={`vote-skip-btn ${gameState.readyToVote?.includes(playerId) ? 'ready' : ''}`}
+                                        disabled={gameState.readyToVote?.includes(playerId)}
+                                    >
+                                        {gameState.readyToVote?.includes(playerId) ?
+                                            '✓ Oylamaya Hazırsın' :
+                                            `Oylamayı Başlat (${gameState.readyToVote?.length || 0}/${Object.values(gameState.alive).filter(a => a).length})`
+                                        }
+                                    </button>
+                                )}
                             </div>
                         )}
                     </>
