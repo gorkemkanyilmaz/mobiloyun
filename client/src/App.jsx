@@ -20,6 +20,7 @@ function App() {
   const [room, setRoom] = useState(null);
   const [error, setError] = useState(null);
   const [pausedBy, setPausedBy] = useState(null);
+  const [playerId, setPlayerId] = useState(null); // Track current player ID
 
   useEffect(() => {
     function onConnect() {
@@ -43,6 +44,7 @@ function App() {
       setRoom(newRoom);
       setView('LOBBY');
       setError(null);
+      setPlayerId(socket.id);
       localStorage.setItem('ph_roomId', newRoom.id);
       localStorage.setItem('ph_playerId', socket.id);
     }
@@ -248,14 +250,14 @@ function App() {
           />
         )}
 
-        {view === 'GAME' && (
+        {view === 'GAME' && playerId && (
           <div className="game-wrapper">
-            {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} playerId={socket.id} />}
-            {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} playerId={socket.id} />}
-            {room?.gameType === 'CHAMELEON' && <Chameleon room={room} playerId={socket.id} />}
-            {room?.gameType === 'UNO' && <Uno room={room} playerId={socket.id} />}
-            {room?.gameType === 'KIM_DAHA_YAKIN' && <KimDahaYakin room={room} playerId={socket.id} />}
-            {room?.gameType === 'TABOO' && <Taboo room={room} playerId={socket.id} />}
+            {room?.gameType === 'VAMPIR_KOYLU' && <VampirKoylu room={room} playerId={playerId} />}
+            {room?.gameType === 'SECRET_HITLER' && <SecretHitler room={room} playerId={playerId} />}
+            {room?.gameType === 'CHAMELEON' && <Chameleon room={room} playerId={playerId} />}
+            {room?.gameType === 'UNO' && <Uno room={room} playerId={playerId} />}
+            {room?.gameType === 'KIM_DAHA_YAKIN' && <KimDahaYakin room={room} playerId={playerId} />}
+            {room?.gameType === 'TABOO' && <Taboo room={room} playerId={playerId} />}
           </div>
         )}
       </main>

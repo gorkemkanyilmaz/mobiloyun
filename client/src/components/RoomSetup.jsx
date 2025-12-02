@@ -20,7 +20,7 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
         'UNO': 'Uno',
         'MONOPOLY_DEAL': 'Monopoly Deal',
         'TABOO': 'Taboo',
-        'GUESS_NUMBER': 'Kim Daha Yakın?'
+        'KIM_DAHA_YAKIN': 'Kim Daha Yakın?'
     };
 
     const handleJoin = (e) => {

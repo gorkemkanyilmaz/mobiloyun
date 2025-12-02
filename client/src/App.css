@@ -48,6 +48,9 @@ body {
   flex: 1;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 button {
@@ -322,10 +325,6 @@ button {
   color: black;
 }
 
-border-radius: 12px;
-transition: all 0.2s;
-height: 120px;
-}
 
 .game-card:hover {
   border-color: var(--accent-color);
@@ -558,6 +557,9 @@ header.compact .status-indicator {
   height: 100vh;
   padding-top: 50px;
   /* Space for compact header */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-container:has(header.compact) #root {
