@@ -26,7 +26,27 @@ class ChameleonGame {
             });
         }
 
-        this.topics = {
+        this.topics = this.loadTopics();
+        this.startNewRound();
+    }
+
+    loadTopics() {
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const dataPath = path.join(__dirname, '../data/chameleon_words.json');
+
+            if (fs.existsSync(dataPath)) {
+                const rawData = fs.readFileSync(dataPath);
+                const jsonData = JSON.parse(rawData);
+                return jsonData.topics;
+            }
+        } catch (error) {
+            console.error('Error loading chameleon words from JSON:', error);
+        }
+
+        // Fallback topics if file fails
+        return {
             'Hayvanlar': ['Kedi', 'Köpek', 'Fil', 'Zürafa', 'Aslan', 'Penguen', 'Yunus', 'Kartal', 'Ayı', 'Tavşan'],
             'Yiyecekler': ['Pizza', 'Hamburger', 'Döner', 'Kebap', 'Sushi', 'Makarna', 'Salata', 'Çorba', 'Dondurma', 'Baklava'],
             'Ülkeler': ['Türkiye', 'Almanya', 'Japonya', 'Brezilya', 'İtalya', 'Fransa', 'Rusya', 'Çin', 'Mısır', 'Kanada'],
@@ -34,13 +54,10 @@ class ChameleonGame {
             'Eşyalar': ['Bilgisayar', 'Telefon', 'Masa', 'Sandalye', 'Kalem', 'Kitap', 'Gözlük', 'Saat', 'Çanta', 'Ayakkabı']
         };
 
-        console.log(`[Chameleon] Game initialized for room ${room.id}`);
-        this.startNewRound();
     }
 
     startNewRound() {
         try {
-            console.log('[Chameleon] Starting new round...');
             // Clear logs and reset round state
             this.state.logs = [];
             this.state.votes = {};
@@ -72,14 +89,48 @@ class ChameleonGame {
             this.state.firstSpeakerIndex++; // Increment for next round
 
             // 3. Pick Topic and Word
+            if (!this.topics || Object.keys(this.topics).length === 0) {
+                console.error('[Chameleon] No topics available!');
+                this.topics = this.loadTopics(); // Try reloading
+            }
+
             const topicKeys = Object.keys(this.topics);
+
             const randomTopic = topicKeys[Math.floor(Math.random() * topicKeys.length)];
             const words = this.topics[randomTopic];
-            const randomWord = words[Math.floor(Math.random() * words.length)];
 
-            this.state.topic = randomTopic;
-            this.state.secretWord = randomWord;
-            this.state.wordList = words;
+            if (!words || words.length === 0) {
+                console.error(`[Chameleon] No words found for topic: ${randomTopic}`);
+                // Fallback to hardcoded if specific topic fails
+                this.state.topic = 'Hata';
+                this.state.secretWord = 'Hata';
+                this.state.wordList = [];
+            } else {
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                this.state.topic = randomTopic;
+                this.state.secretWord = randomWord;
+
+                // Select a subset of words (max 12) including the secret word
+                let subsetWords = [randomWord];
+                const otherWords = words.filter(w => w !== randomWord);
+
+                // Shuffle other words
+                for (let i = otherWords.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [otherWords[i], otherWords[j]] = [otherWords[j], otherWords[i]];
+                }
+
+                // Take up to 11 other words
+                subsetWords = subsetWords.concat(otherWords.slice(0, 11));
+
+                // Shuffle the final subset so secret word isn't always first
+                for (let i = subsetWords.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [subsetWords[i], subsetWords[j]] = [subsetWords[j], subsetWords[i]];
+                }
+
+                this.state.wordList = subsetWords;
+            }
 
             this.addLog(`YENİ TUR BAŞLADI! Konu: ${randomTopic}`);
             this.addLog(`İlk konuşmacı: ${players[speakerIdx].name}`);

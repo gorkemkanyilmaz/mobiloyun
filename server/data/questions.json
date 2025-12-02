@@ -1,0 +1,754 @@
+{
+    "questions": [
+        {
+            "question": "Türkiye'nin plaka kodu sayısı kaçtır?",
+            "answer": 81,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Bir satranç tahtasında toplam kaç kare bulunur?",
+            "answer": 64,
+            "category": "Spor"
+        },
+        {
+            "question": "Cumhuriyet kaç yılında ilan edilmiştir?",
+            "answer": 1923,
+            "category": "Tarih"
+        },
+        {
+            "question": "Yetişkin bir insanda ortalama kaç adet kemik bulunur?",
+            "answer": 206,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünya'nın uydusu olan Ay'a ayak basılan yıl hangisidir?",
+            "answer": 1969,
+            "category": "Tarih"
+        },
+        {
+            "question": "Futbolda bir takım sahada kaç oyuncu ile mücadele eder?",
+            "answer": 11,
+            "category": "Spor"
+        },
+        {
+            "question": "Suyun deniz seviyesinde kaynama noktası kaç derecedir?",
+            "answer": 100,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Türkiye'nin uluslararası telefon alan kodu nedir?",
+            "answer": 90,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Bir yılda kaç hafta vardır?",
+            "answer": 52,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "İstanbul'un fethi kaç yılında gerçekleşmiştir?",
+            "answer": 1453,
+            "category": "Tarih"
+        },
+        {
+            "question": "Everest Dağı'nın yüksekliği kaç metredir?",
+            "answer": 8849,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir basketbol potasının yerden yüksekliği kaç santimetredir?",
+            "answer": 305,
+            "category": "Spor"
+        },
+        {
+            "question": "Türkiye'de kaç adet coğrafi bölge bulunmaktadır?",
+            "answer": 7,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "İnsan kalbi dakikada ortalama kaç kez atar (dinlenme hali)?",
+            "answer": 72,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Atatürk'ün doğum yılı nedir?",
+            "answer": 1881,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünya üzerindeki kıta sayısı kaçtır?",
+            "answer": 7,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Örümceklerin kaç bacağı vardır?",
+            "answer": 8,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Usain Bolt'un 100 metre dünya rekoru kaç saniyedir?",
+            "answer": 9.58,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Bir asır kaç yıldır?",
+            "answer": 100,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Malazgirt Meydan Muharebesi kaç yılında yapılmıştır?",
+            "answer": 1071,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir voleybol takımı sahada kaç oyuncu ile oynar?",
+            "answer": 6,
+            "category": "Spor"
+        },
+        {
+            "question": "Dünyanın en derin noktası olan Mariana Çukuru yaklaşık kaç metredir?",
+            "answer": 11034,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "İnsan vücudunda kaç çift kromozom bulunur?",
+            "answer": 23,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en uzun yaşayan insanı (Jeanne Calment) kaç yaşında vefat etmiştir?",
+            "answer": 122,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Türkiye NATO'ya kaç yılında üye olmuştur?",
+            "answer": 1952,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir maraton koşusu kaç kilometredir (yaklaşık)?",
+            "answer": 42,
+            "category": "Spor"
+        },
+        {
+            "question": "Dünya Kupası kaç yılda bir düzenlenir?",
+            "answer": 4,
+            "category": "Spor"
+        },
+        {
+            "question": "Bir ahtapotun kaç kalbi vardır?",
+            "answer": 3,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Türkiye'nin nüfusu yaklaşık kaç milyondur (2023 verisi)?",
+            "answer": 85,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Pi sayısı (π) yaklaşık olarak kaçtır (ilk iki basamak)?",
+            "answer": 3.14,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Fransız İhtilali kaç yılında başlamıştır?",
+            "answer": 1789,
+            "category": "Tarih"
+        },
+        {
+            "question": "Güneş ışığının Dünya'ya ulaşması yaklaşık kaç dakika sürer?",
+            "answer": 8,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Bir düzine kaç adettir?",
+            "answer": 12,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en uzun adamı Sultan Kösen'in boyu kaç santimetredir?",
+            "answer": 251,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Hentbol takımında kaleci dahil kaç oyuncu vardır?",
+            "answer": 7,
+            "category": "Spor"
+        },
+        {
+            "question": "Anıtkabir'in inşası kaç yılında tamamlanmıştır?",
+            "answer": 1953,
+            "category": "Tarih"
+        },
+        {
+            "question": "Kedilerin arka ayaklarında kaç parmak vardır?",
+            "answer": 4,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Periyodik tabloda Hidrojen elementinin atom numarası kaçtır?",
+            "answer": 1,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Bir gün kaç dakikadır?",
+            "answer": 1440,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en kalabalık ülkesi Hindistan'ın nüfusu yaklaşık kaç milyardır?",
+            "answer": 1.4,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Zürafaların dili yaklaşık kaç santimetredir?",
+            "answer": 50,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Buz hokeyi maçları kaçar dakikalık periyotlar halinde oynanır?",
+            "answer": 20,
+            "category": "Spor"
+        },
+        {
+            "question": "Titanik gemisi kaç yılında batmıştır?",
+            "answer": 1912,
+            "category": "Tarih"
+        },
+        {
+            "question": "Ağrı Dağı'nın yüksekliği kaç metredir?",
+            "answer": 5137,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir bowling oyununda maksimum skor kaçtır?",
+            "answer": 300,
+            "category": "Spor"
+        },
+        {
+            "question": "İnsan vücudunun normal sıcaklığı kaç derecedir?",
+            "answer": 36.5,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın çevresi ekvatordan yaklaşık kaç bindir kilometredir?",
+            "answer": 40075,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Yetişkin bir insanda kaç adet diş bulunur (20 yaş dişleri dahil)?",
+            "answer": 32,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "İlk iPhone kaç yılında tanıtılmıştır?",
+            "answer": 2007,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir karıncanın beyninde yaklaşık kaç nöron vardır?",
+            "answer": 250000,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Türkiye Büyük Millet Meclisi'nde (TBMM) kaç milletvekili bulunur?",
+            "answer": 600,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Bir futbol maçının normal süresi kaç dakikadır?",
+            "answer": 90,
+            "category": "Spor"
+        },
+        {
+            "question": "Atatürk kaç yılında vefat etmiştir?",
+            "answer": 1938,
+            "category": "Tarih"
+        },
+        {
+            "question": "Güneş sistemimizde kaç tane gezegen vardır?",
+            "answer": 8,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "İstanbul'un plaka kodu nedir?",
+            "answer": 34,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "İnsan vücudundaki en küçük kemik (üzengi) yaklaşık kaç milimetredir?",
+            "answer": 3,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Dünyanın en yüksek binası Burj Khalifa kaç metredir?",
+            "answer": 828,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Birinci Dünya Savaşı kaç yılında başlamıştır?",
+            "answer": 1914,
+            "category": "Tarih"
+        },
+        {
+            "question": "Türkiye'de kadınlara seçme ve seçilme hakkı kaç yılında verilmiştir?",
+            "answer": 1934,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir saat kaç saniyedir?",
+            "answer": 3600,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Böceklerin kaç bacağı vardır?",
+            "answer": 6,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Euro para birimi kaç yılında tedavüle girmiştir (banknot olarak)?",
+            "answer": 2002,
+            "category": "Tarih"
+        },
+        {
+            "question": "Naim Süleymanoğlu Seul Olimpiyatları'nda kaç dünya rekoru kırmıştır?",
+            "answer": 6,
+            "category": "Spor"
+        },
+        {
+            "question": "Türkiye'nin en uzun nehri Kızılırmak kaç kilometredir?",
+            "answer": 1355,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir piyano klavyesinde standart olarak kaç tuş bulunur?",
+            "answer": 88,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Periyodik tabloda bilinen kaç element vardır?",
+            "answer": 118,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Hatay kaç yılında anavatana katılmıştır?",
+            "answer": 1939,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünyanın en kalabalık ikinci ülkesi Çin'in nüfusu yaklaşık kaç milyardır?",
+            "answer": 1.41,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir zürafanın boynunda kaç omur bulunur (insanla aynı)?",
+            "answer": 7,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Dünyanın en yaşlı kedisi Creme Puff kaç yıl yaşamıştır?",
+            "answer": 38,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "NBA'de bir periyot kaç dakika sürer?",
+            "answer": 12,
+            "category": "Spor"
+        },
+        {
+            "question": "İkinci Dünya Savaşı kaç yılında sona ermiştir?",
+            "answer": 1945,
+            "category": "Tarih"
+        },
+        {
+            "question": "Suyun donma noktası kaç derecedir?",
+            "answer": 0,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Bir deniz mili kaç metredir?",
+            "answer": 1852,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en büyük çölü (Antarktika hariç) Sahra Çölü'nün yüzölçümü yaklaşık kaç milyon km²'dir?",
+            "answer": 9.2,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir insan ömrü boyunca uyurken ortalama kaç böcek yutar (şehir efsanesi olsa da kabul gören sayı)?",
+            "answer": 8,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Amerika Birleşik Devletleri'nin telefon alan kodu nedir?",
+            "answer": 1,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Lozan Antlaşması kaç yılında imzalanmıştır?",
+            "answer": 1923,
+            "category": "Tarih"
+        },
+        {
+            "question": "Teniste 'Grand Slam' turnuvası sayısı kaçtır?",
+            "answer": 4,
+            "category": "Spor"
+        },
+        {
+            "question": "Van Gölü'nün deniz seviyesinden yüksekliği (rakımı) kaç metredir?",
+            "answer": 1646,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir deste kaç adettir?",
+            "answer": 10,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en uzun tırnaklı kadınının tırnakları toplam kaç metredir?",
+            "answer": 7.3,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "İstiklal Marşı kaç yılında kabul edilmiştir?",
+            "answer": 1921,
+            "category": "Tarih"
+        },
+        {
+            "question": "Formula 1 araçlarının minimum ağırlığı (sürücü dahil) kaç kilogramdır (2023)?",
+            "answer": 798,
+            "category": "Spor"
+        },
+        {
+            "question": "Bir sinek kuşu saniyede ortalama kaç kez kanat çırpar?",
+            "answer": 50,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Türkiye'de trafik acil numarası kaçtır?",
+            "answer": 112,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Çernobil Nükleer Faciası kaç yılında gerçekleşmiştir?",
+            "answer": 1986,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünya'nın Güneş'e olan uzaklığı yaklaşık kaç milyon kilometredir?",
+            "answer": 149,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Michael Phelps Olimpiyatlarda toplam kaç altın madalya kazanmıştır?",
+            "answer": 23,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Bir yılda kaç mevsim vardır?",
+            "answer": 4,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Berlin Duvarı kaç yılında yıkılmıştır?",
+            "answer": 1989,
+            "category": "Tarih"
+        },
+        {
+            "question": "Futbol kalesi direkleri arası mesafe kaç metredir?",
+            "answer": 7.32,
+            "category": "Spor"
+        },
+        {
+            "question": "Bir insan günde ortalama kaç kez göz kırpar?",
+            "answer": 15000,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Ankara'nın plaka kodu kaçtır?",
+            "answer": 6,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Fatih Sultan Mehmet İstanbul'u fethettiğinde kaç yaşındaydı?",
+            "answer": 21,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünyanın en uzun nehri Nil Nehri yaklaşık kaç kilometredir?",
+            "answer": 6650,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir bowling labutunun (pin) ağırlığı en fazla kaç kilogram olabilir?",
+            "answer": 1.6,
+            "category": "Spor"
+        },
+        {
+            "question": "İnternetin atası sayılan ARPANET ilk mesajı kaç yılında göndermiştir?",
+            "answer": 1969,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir köpekbalığının hayatı boyunca kaybedip yenilediği diş sayısı yaklaşık kaçtır?",
+            "answer": 30000,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Dünyanın en hızlı kara hayvanı çitanın hızı saatte kaç km'ye ulaşabilir?",
+            "answer": 120,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Türkiye'nin yüzölçümü yaklaşık kaç bin kilometrekaredir?",
+            "answer": 783,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Yuri Gagarin uzaya kaç yılında çıkmıştır?",
+            "answer": 1961,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir golf sahasında standart delik sayısı kaçtır?",
+            "answer": 18,
+            "category": "Spor"
+        },
+        {
+            "question": "En fazla Oscar ödülü kazanan film (Yüzüklerin Efendisi vb.) kaç ödül almıştır?",
+            "answer": 11,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Bir küpün kaç yüzü vardır?",
+            "answer": 6,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Mimar Sinan, 'Ustalık Eserim' dediği Selimiye Camii'ni bitirdiğinde kaç yaşındaydı?",
+            "answer": 85,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünya'nın atmosferindeki oksijen oranı yüzde kaçtır?",
+            "answer": 21,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir sümüklü böceğin uyku süresi kaç yıla kadar çıkabilir?",
+            "answer": 3,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Modern Olimpiyatlar ilk kez kaç yılında düzenlenmiştir?",
+            "answer": 1896,
+            "category": "Spor"
+        },
+        {
+            "question": "Bir insanın damarlarının toplam uzunluğu yaklaşık kaç bin kilometredir?",
+            "answer": 100,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Google kaç yılında kurulmuştur?",
+            "answer": 1998,
+            "category": "Tarih"
+        },
+        {
+            "question": "Satrançta her oyuncu oyuna kaç taşla başlar?",
+            "answer": 16,
+            "category": "Spor"
+        },
+        {
+            "question": "Ay'ın Dünya etrafındaki dönüşü yaklaşık kaç gün sürer?",
+            "answer": 27,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Dünyada en çok çocuğu olan kadının kaç çocuğu vardı?",
+            "answer": 69,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "İstiklal Marşı kaç kıtadan oluşur?",
+            "answer": 10,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Kristof Kolomb Amerika'yı kaç yılında keşfetmiştir?",
+            "answer": 1492,
+            "category": "Tarih"
+        },
+        {
+            "question": "Kangurular zıplayarak saatte kaç km hıza ulaşabilir?",
+            "answer": 70,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Bir boks maçında raunt arası dinlenme süresi kaç dakikadır?",
+            "answer": 1,
+            "category": "Spor"
+        },
+        {
+            "question": "Altının atom numarası kaçtır?",
+            "answer": 79,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Türkiye'de kaç ilçe bulunmaktadır (yaklaşık)?",
+            "answer": 973,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Süleyman Demirel kaç kez başbakanlık yapmıştır?",
+            "answer": 7,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir olimpik yüzme havuzunun uzunluğu kaç metredir?",
+            "answer": 50,
+            "category": "Spor"
+        },
+        {
+            "question": "Yılanların kaç göz kapağı vardır?",
+            "answer": 0,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Facebook kaç yılında kurulmuştur?",
+            "answer": 2004,
+            "category": "Tarih"
+        },
+        {
+            "question": "Güneş ışığı okyanusun kaç metre derinliğine kadar ulaşabilir?",
+            "answer": 200,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "En uzun tenis maçı kaç saat sürmüştür?",
+            "answer": 11,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Bir tavşan yılda ortalama kaç yavru doğurabilir?",
+            "answer": 40,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Türk alfabesinde kaç harf vardır?",
+            "answer": 29,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "İlk motorlu uçak uçuşu kaç yılında yapılmıştır (Wright Kardeşler)?",
+            "answer": 1903,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir ragbi takımı sahada kaç oyuncudan oluşur?",
+            "answer": 15,
+            "category": "Spor"
+        },
+        {
+            "question": "Jüpiter'in bilinen kaç uydusu vardır (yaklaşık)?",
+            "answer": 95,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Bir kedinin kulağında kaç kas bulunur?",
+            "answer": 32,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Cep telefonuyla ilk görüşme kaç yılında yapılmıştır?",
+            "answer": 1973,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir dart tahtasında en yüksek puanlı bölge kaç puandır (Bullseye hariç)?",
+            "answer": 60,
+            "category": "Spor"
+        },
+        {
+            "question": "Periyodik tabloda oksijenin atom numarası kaçtır?",
+            "answer": 8,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Dünyanın en büyük adası Grönland'ın yüzölçümü kaç milyon km²'dir?",
+            "answer": 2.16,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Tek seferde en çok tişört giyme rekoru kaç adettir?",
+            "answer": 260,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "YouTube kaç yılında kurulmuştur?",
+            "answer": 2005,
+            "category": "Tarih"
+        },
+        {
+            "question": "Bir deve hörgücü olmadan kaç gün susuz yaşayabilir?",
+            "answer": 7,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Sumo güreşinde ringin (dohyo) çapı kaç metredir?",
+            "answer": 4.55,
+            "category": "Spor"
+        },
+        {
+            "question": "Türkiye AB gümrük birliğine kaç yılında girmiştir?",
+            "answer": 1996,
+            "category": "Tarih"
+        },
+        {
+            "question": "Ses hızı havada saniyede yaklaşık kaç metredir?",
+            "answer": 343,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Asya kıtasında kaç ülke vardır (yaklaşık)?",
+            "answer": 48,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Dünyanın en küçük ülkesi Vatikan'ın nüfusu yaklaşık kaçtır?",
+            "answer": 800,
+            "category": "Genel Kültür"
+        },
+        {
+            "question": "Süper Lig kaç yılında kurulmuştur (Milli Lig adıyla)?",
+            "answer": 1959,
+            "category": "Spor"
+        },
+        {
+            "question": "Bir insan beyni yaklaşık kaç kilogramdır?",
+            "answer": 1.4,
+            "category": "İlginç Bilgiler"
+        },
+        {
+            "question": "Eyfel Kulesi'nin inşası kaç yılında tamamlanmıştır?",
+            "answer": 1889,
+            "category": "Tarih"
+        },
+        {
+            "question": "Dünyanın en tuzlu denizi olan Lut Gölü'nün tuz oranı yüzde kaçtır?",
+            "answer": 33,
+            "category": "Coğrafya"
+        },
+        {
+            "question": "Dünyanın en pahalı pizzası kaç bin dolara satılmıştır?",
+            "answer": 12,
+            "category": "Guinness Rekorları"
+        },
+        {
+            "question": "Bir yetişkinin günlük ortalama su ihtiyacı kaç litredir?",
+            "answer": 2.5,
+            "category": "Genel Kültür"
+        }
+    ]
+}
