@@ -50,6 +50,16 @@ function KimDahaYakin({ room, playerId }) {
                     ) : (
                         <div className="waiting">✓ Cevap gönderildi, diğerleri bekleniyor...</div>
                     )}
+
+                    <div className="scoreboard">
+                        {Object.values(players).map(p => (
+                            <div key={p.name} className={`player-score ${p.name === myPlayer.name ? 'me' : ''}`}>
+                                <span>{p.name}</span>
+                                <span className="score">{p.score}</span>
+                                {p.hasAnswered && <span className="check">✓</span>}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -84,16 +94,6 @@ function KimDahaYakin({ room, playerId }) {
                     </div>
                 </div>
             )}
-
-            <div className="scoreboard">
-                {Object.values(players).map(p => (
-                    <div key={p.name} className={`player-score ${p.name === myPlayer.name ? 'me' : ''}`}>
-                        <span>{p.name}</span>
-                        <span className="score">{p.score}</span>
-                        {p.hasAnswered && phase === 'QUESTION' && <span className="check">✓</span>}
-                    </div>
-                ))}
-            </div>
         </div>
     );
 }

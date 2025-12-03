@@ -13,7 +13,8 @@ class Taboo {
             passesRemaining: 3,
             roundScore: 0,
             usedCards: [],
-            logs: []
+            logs: [],
+            countdown: 10
         };
         this.cards = this.createCards();
         this.timer = null;
@@ -62,8 +63,7 @@ class Taboo {
         } else if (action.type === 'HATALI') {
             this.handleHatali();
         } else if (action.type === 'NEXT_ROUND') {
-            this.selectDescriber();
-            setTimeout(() => this.startRound(), 3000);
+            this.prepareNextRound();
         }
     }
 
@@ -85,8 +85,29 @@ class Taboo {
         this.state.phase = 'ROUND_START';
         this.state.currentTeam = 'mavi';
         this.selectDescriber();
+        this.state.countdown = 10;
         this.broadcastState();
-        setTimeout(() => this.startRound(), 3000);
+        this.startCountdown();
+    }
+
+    prepareNextRound() {
+        this.state.phase = 'ROUND_START';
+        this.selectDescriber();
+        this.state.countdown = 10;
+        this.broadcastState();
+        this.startCountdown();
+    }
+
+    startCountdown() {
+        if (this.countdownTimer) clearInterval(this.countdownTimer);
+        this.countdownTimer = setInterval(() => {
+            this.state.countdown--;
+            this.broadcastState();
+            if (this.state.countdown <= 0) {
+                clearInterval(this.countdownTimer);
+                this.startRound();
+            }
+        }, 1000);
     }
 
     selectDescriber() {

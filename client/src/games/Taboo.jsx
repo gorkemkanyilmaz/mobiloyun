@@ -60,7 +60,7 @@ function Taboo({ room, playerId }) {
                 <div className="round-start">
                     <h1>{currentTeam === 'mavi' ? 'Mavi' : 'Kırmızı'} Takım Anlatıyor</h1>
                     <h2>Anlatıcı: {room.players.find(p => p.id === currentDescriber)?.name}</h2>
-                    <div className="countdown">Hazırlan...</div>
+                    <div className="countdown">{gameState.countdown || 3}</div>
                 </div>
             )}
 
@@ -75,6 +75,8 @@ function Taboo({ room, playerId }) {
                             <span className="mavi">{teams.mavi.score}</span> - <span className="kirmizi">{teams.kirmizi.score}</span>
                         </div>
                     </div>
+
+                    <div className="round-score-display">Tur Puanı: {roundScore}</div>
 
                     {currentCard && (isDescriber || myTeam === opposingTeam) && (
                         <div className="card">
@@ -99,7 +101,6 @@ function Taboo({ room, playerId }) {
                                 Pas ({passesRemaining}/3)
                             </button>
                             <button className="hatali-btn" onClick={hatali}>✗ Hatalı (-1)</button>
-                            <div className="round-score">Tur Puanı: {roundScore}</div>
                         </div>
                     )}
                 </div>
