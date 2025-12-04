@@ -32,11 +32,29 @@
     opacity: 0.6;
     transition: all 0.3s;
     transform: scale(0.75);
+    padding: 8px;
+    border-radius: 12px;
+    border: 2px solid transparent;
 }
 
-border-radius: 50%;
-background: #fff;
-border: 2px solid transparent;
+.opponent.turn {
+    opacity: 1;
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00;
+}
+
+.opponent .avatar {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.opponent .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid transparent;
 }
 
 .opponent.turn .avatar img {
@@ -70,6 +88,38 @@ border: 2px solid transparent;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* Center Turn Indicator - Above Deck */
+.center-turn-indicator {
+    position: absolute;
+    top: -83px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #00ff00;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ff00, 0 1px 3px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 4px 15px rgba(0, 0, 0, 0.6);
+    border: 2px solid #00ff00;
+    white-space: nowrap;
+    z-index: 100;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 4px 15px rgba(0, 0, 0, 0.6);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.6), 0 4px 15px rgba(0, 0, 0, 0.6);
+    }
 }
 
 /* Center Area - Absolute Centering */
@@ -113,7 +163,8 @@ border: 2px solid transparent;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     white-space: nowrap;
     z-index: 100;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 @keyframes bounce {
@@ -496,7 +547,7 @@ border: 2px solid transparent;
 /* Logs */
 .game-logs {
     position: absolute;
-    top: 15%;
+    top: 18%;
     left: 10px;
     right: auto;
     transform: none;

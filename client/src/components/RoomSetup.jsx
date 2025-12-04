@@ -18,7 +18,6 @@ function RoomSetup({ selectedGame, onJoin, onCreate, onBack }) {
         'SECRET_HITLER': 'Secret Hitler',
         'CHAMELEON': 'Bukalemun',
         'UNO': 'Uno',
-        'MONOPOLY_DEAL': 'Monopoly Deal',
         'TABOO': 'Taboo',
         'KIM_DAHA_YAKIN': 'Kim Daha Yakın?'
     };

@@ -5,7 +5,6 @@ const GAMES = [
     { id: 'SECRET_HITLER', name: 'Secret Hitler', icon: '📜' },
     { id: 'CHAMELEON', name: 'Bukalemun', icon: '🦎' },
     { id: 'UNO', name: 'Uno', icon: '🃏' },
-    { id: 'MONOPOLY_DEAL', name: 'Monopoly Deal', icon: '🏠' },
     { id: 'TABOO', name: 'Taboo', icon: '🚫' },
     { id: 'KIM_DAHA_YAKIN', name: 'Kim Daha Yakın?', icon: '🔢' },
 ];

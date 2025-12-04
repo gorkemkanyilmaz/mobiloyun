@@ -107,11 +107,16 @@ function Uno({ room, playerId }) {
 
             {/* Game Center */}
             <div className="game-center">
+                {/* Turn Indicator */}
+                <div className="center-turn-indicator">
+                    Kart Atma Sırası: {gameState.turnPlayerId === playerId ? 'SENDE' : room.players.find(p => p.id === gameState.turnPlayerId)?.name || 'Bilinmeyen'}
+                </div>
+
                 <div className="deck-area" onClick={handleDrawCard}>
                     <div className="uno-card back">
                         <div className="oval">UNO</div>
                     </div>
-                    {isMyTurn && <div className="draw-hint">ÇEK</div>}
+                    {isMyTurn && <div className="draw-hint" onClick={handleDrawCard}>ÇEK</div>}
                 </div>
 
                 <div className="discard-area">
