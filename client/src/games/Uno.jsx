@@ -7,6 +7,7 @@ function Uno({ room, playerId }) {
     const [logs, setLogs] = useState([]);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [pendingCard, setPendingCard] = useState(null); // Card waiting for color choice
+    const [showUnoAnnouncement, setShowUnoAnnouncement] = useState(false);
 
     useEffect(() => {
         socket.on('gameState', (state) => {
@@ -16,6 +17,12 @@ function Uno({ room, playerId }) {
 
         socket.on('gameLog', (log) => {
             setLogs(prev => [...prev, log]);
+
+            // Check if someone called UNO
+            if (log.message && log.message.includes('UNO!')) {
+                setShowUnoAnnouncement(true);
+                setTimeout(() => setShowUnoAnnouncement(false), 2000);
+            }
         });
 
         socket.emit('getGameState');
@@ -52,6 +59,9 @@ function Uno({ room, playerId }) {
 
     const handleSayUno = () => {
         socket.emit('gameAction', { type: 'SAY_UNO' });
+        // Show UNO announcement immediately when button is clicked
+        setShowUnoAnnouncement(true);
+        setTimeout(() => setShowUnoAnnouncement(false), 2000);
     };
 
     if (!gameState) return <div className="loading">Uno Yükleniyor...</div>;
@@ -84,6 +94,17 @@ function Uno({ room, playerId }) {
             </div>
         );
     };
+
+    // Calculate dynamic card size based on hand count
+    const cardCount = gameState?.myHand?.length || 0;
+    const maxCardsWithoutShrink = 5;
+    let cardScale = 1;
+
+    if (cardCount > maxCardsWithoutShrink) {
+        // Calculate scale to fit all cards on screen
+        // Assuming screen width is ~100vw and card width is 70px with 5px gap
+        cardScale = Math.max(0.5, maxCardsWithoutShrink / cardCount);
+    }
 
     return (
         <div className="game-container uno">
@@ -142,18 +163,34 @@ function Uno({ room, playerId }) {
             </div>
 
             {/* My Hand */}
-            <div className={`my-hand ${isMyTurn ? 'active-turn' : ''}`}>
-                {gameState.myHand.map(card => {
-                    // Check if playable for simple visual feedback
-                    const isPlayable = isMyTurn && (
-                        card.color === 'black' ||
-                        card.color === gameState.currentColor ||
-                        (card.type === 'number' && card.value === gameState.discardTop.value) ||
-                        (['skip', 'reverse', 'draw2'].includes(card.type) && card.type === gameState.discardTop.type)
-                    );
+            <div
+                className={`my-hand ${isMyTurn ? 'active-turn' : ''}`}
+                style={{
+                    '--card-scale': cardScale
+                }}
+            >
+                {gameState.myHand
+                    .sort((a, b) => {
+                        // Color order: red, blue, green, yellow, black
+                        const colorOrder = { 'red': 0, 'blue': 1, 'green': 2, 'yellow': 3, 'black': 4 };
+                        const colorA = colorOrder[a.color] ?? 5;
+                        const colorB = colorOrder[b.color] ?? 5;
+                        if (colorA !== colorB) return colorA - colorB;
+                        // If same color, sort by type then value
+                        if (a.type !== b.type) return a.type.localeCompare(b.type);
+                        return (a.value || '').toString().localeCompare((b.value || '').toString());
+                    })
+                    .map(card => {
+                        // Check if playable for simple visual feedback
+                        const isPlayable = isMyTurn && (
+                            card.color === 'black' ||
+                            card.color === gameState.currentColor ||
+                            (card.type === 'number' && card.value === gameState.discardTop.value) ||
+                            (['skip', 'reverse', 'draw2'].includes(card.type) && card.type === gameState.discardTop.type)
+                        );
 
-                    return renderCard(card, () => isPlayable && handlePlayCard(card), isPlayable);
-                })}
+                        return renderCard(card, () => isPlayable && handlePlayCard(card), isPlayable);
+                    })}
             </div>
 
             {/* ... Color Picker ... */}
@@ -171,6 +208,13 @@ function Uno({ room, playerId }) {
                             ))}
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* UNO Announcement Overlay */}
+            {showUnoAnnouncement && (
+                <div className="uno-announcement-overlay">
+                    <div className="uno-announcement-text">UNO!</div>
                 </div>
             )}
 

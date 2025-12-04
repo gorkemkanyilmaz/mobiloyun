@@ -32,21 +32,17 @@
     opacity: 0.6;
     transition: all 0.3s;
     transform: scale(0.75);
-    padding: 8px;
-    border-radius: 12px;
-    border: 2px solid transparent;
 }
 
 .opponent.turn {
     opacity: 1;
-    border: 2px solid #00ff00;
-    box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00;
 }
 
 .opponent .avatar {
     position: relative;
     width: 50px;
     height: 50px;
+    overflow: visible;
 }
 
 .opponent .avatar img {
@@ -64,20 +60,21 @@
 
 .card-count-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -12px;
+    right: -12px;
     background: #e74c3c;
     color: white;
     border-radius: 50%;
-    width: 16px;
-    height: 16px;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6rem;
+    font-size: 0.85rem;
     font-weight: bold;
     border: 2px solid #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    z-index: 100;
 }
 
 .opponent .name {
@@ -323,7 +320,7 @@
 }
 
 .card-value {
-    font-size: 2.5rem;
+    font-size: calc(2.5rem * var(--card-scale, 1));
     font-weight: 900;
     color: white;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4), -1px -1px 0 rgba(255, 255, 255, 0.2);
@@ -336,7 +333,7 @@
     position: absolute;
     top: 2px;
     left: 4px;
-    font-size: 0.8rem;
+    font-size: calc(0.8rem * var(--card-scale, 1));
     color: white;
     font-weight: bold;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
@@ -344,19 +341,24 @@
 
 /* My Hand - Scrollable, Side by Side */
 .my-hand {
+    --card-scale: 1;
+    /* Default scale, overridden by JS */
     display: flex;
     flex-direction: row;
     /* Explicitly set row */
     flex-wrap: nowrap;
     /* Prevent wrapping */
-    justify-content: flex-start;
+    justify-content: center;
+    /* Center cards when less than full width */
     /* Start from left, scrollable */
     padding: 40px 1rem 2rem 1rem;
     /* Fallback padding */
     padding-bottom: calc(2rem + env(safe-area-inset-bottom));
     /* Safe area padding */
-    gap: 5px;
-    overflow-x: auto;
+    gap: calc(5px * var(--card-scale));
+    /* Scale gap with cards */
+    overflow-x: visible;
+    /* No scroll needed when cards fit */
     overflow-y: visible;
     min-height: 160px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
@@ -382,9 +384,12 @@
     opacity: 0.95;
     transform-origin: bottom center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: width 0.3s, height 0.3s;
+    transition: width 0.3s, height 0.3s, transform 0.2s;
     flex-shrink: 0;
     /* Prevent shrinking */
+    /* Dynamic scaling based on card count */
+    width: calc(70px * var(--card-scale));
+    height: calc(105px * var(--card-scale));
 }
 
 .my-hand.active-turn .uno-card.playable {
@@ -568,6 +573,97 @@
     text-shadow: 0 1px 2px black;
     color: white;
     font-weight: normal;
+}
+
+/* UNO Announcement */
+.uno-announcement-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 400;
+    pointer-events: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.uno-announcement-text {
+    font-size: 15rem;
+    font-weight: 900;
+    font-family: 'Arial Black', sans-serif;
+    font-style: italic;
+    background: linear-gradient(45deg,
+            #ff0000,
+            #ff7f00,
+            #ffff00,
+            #00ff00,
+            #0000ff,
+            #4b0082,
+            #9400d3);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow:
+        0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 60px rgba(255, 255, 255, 0.6),
+        0 0 90px rgba(255, 255, 255, 0.4);
+    animation:
+        rainbow 1.5s ease-in-out infinite,
+        zoomInPulse 2s ease-in-out;
+    transform-origin: center;
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes zoomInPulse {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    75% {
+        transform: scale(0.95);
+    }
+
+    85% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* Winner */
