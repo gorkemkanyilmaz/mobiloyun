@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { socket } from '../socket';
 import './Uno.css';
 
@@ -8,21 +8,28 @@ function Uno({ room, playerId }) {
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [pendingCard, setPendingCard] = useState(null); // Card waiting for color choice
     const [showUnoAnnouncement, setShowUnoAnnouncement] = useState(false);
+    const lastLogCountRef = useRef(0);
 
     useEffect(() => {
         socket.on('gameState', (state) => {
             setGameState(state);
-            setLogs(state.logs || []);
+            const newLogs = state.logs || [];
+
+            // Check if there are new logs with UNO! message
+            if (newLogs.length > lastLogCountRef.current) {
+                const recentLogs = newLogs.slice(lastLogCountRef.current);
+                const hasUnoCall = recentLogs.some(log => log.message && log.message.includes(': "UNO!"'));
+                if (hasUnoCall) {
+                    setShowUnoAnnouncement(true);
+                    setTimeout(() => setShowUnoAnnouncement(false), 2000);
+                }
+            }
+            lastLogCountRef.current = newLogs.length;
+            setLogs(newLogs);
         });
 
         socket.on('gameLog', (log) => {
             setLogs(prev => [...prev, log]);
-
-            // Check if someone called UNO
-            if (log.message && log.message.includes('UNO!')) {
-                setShowUnoAnnouncement(true);
-                setTimeout(() => setShowUnoAnnouncement(false), 2000);
-            }
         });
 
         socket.emit('getGameState');
@@ -59,9 +66,7 @@ function Uno({ room, playerId }) {
 
     const handleSayUno = () => {
         socket.emit('gameAction', { type: 'SAY_UNO' });
-        // Show UNO announcement immediately when button is clicked
-        setShowUnoAnnouncement(true);
-        setTimeout(() => setShowUnoAnnouncement(false), 2000);
+        // UNO announcement will be shown to everyone via gameState update
     };
 
     if (!gameState) return <div className="loading">Uno Yükleniyor...</div>;
