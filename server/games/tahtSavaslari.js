@@ -154,7 +154,7 @@ class TahtSavaslariGame {
 
                 for (let i = 0; i < 3; i++) {
                     if (this.trapState.traps[i] === null) {
-                        this.trapState.traps[i] = Math.random() < 0.5 ? 0 : 1;
+                        this.trapState.traps[i] = Math.floor(Math.random() * 3);
                     }
                 }
 
@@ -175,6 +175,7 @@ class TahtSavaslariGame {
         if (playerId !== this.opponent) return;
         if (this.phase !== this.PHASES.TRAP_PLACING) return;
         if (column < 0 || column > 2) return;
+        if (position < 0 || position > 2) return;
 
         this.trapState.traps[column] = position;
         this.broadcastState();

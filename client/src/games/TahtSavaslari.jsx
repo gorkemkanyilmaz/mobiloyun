@@ -136,34 +136,30 @@ function TrapArena({ gameState, isChallenger, isOpponent, isSpectator, sendActio
                 {[0, 1, 2].map(col => {
                     // Only show traps to opponent and spectators, NEVER to challenger
                     const canSeeTrap = !isChallenger;
-                    const hasTrapTop = canSeeTrap && trapState.traps && trapState.traps[col] === 0;
-                    const hasTrapBottom = canSeeTrap && trapState.traps && trapState.traps[col] === 1;
 
                     return (
                         <div key={col} className="ts-trap-column">
                             <div className="ts-column-label">Adım {col + 1}</div>
-                            <div
-                                className={`ts-trap-cell ${hasTrapTop ? 'has-trap' : ''} ${isNavigating && trapState.currentStep === col && isChallenger ? 'selectable' : ''} ${trapState.currentStep > col ? 'passed' : ''}`}
-                                onClick={() => {
-                                    if (isPlacing && isOpponent) handlePlaceTrap(col, 0);
-                                    if (isNavigating && isChallenger && trapState.currentStep === col) handleNavigate(0);
-                                }}
-                            >
-                                {hasTrapTop && <span>💣</span>}
-                                {trapState.currentStep > col && <span>✅</span>}
-                                {isPlacing && isOpponent && !hasTrapTop && <span>ÜST</span>}
-                            </div>
-                            <div
-                                className={`ts-trap-cell ${hasTrapBottom ? 'has-trap' : ''} ${isNavigating && trapState.currentStep === col && isChallenger ? 'selectable' : ''} ${trapState.currentStep > col ? 'passed' : ''}`}
-                                onClick={() => {
-                                    if (isPlacing && isOpponent) handlePlaceTrap(col, 1);
-                                    if (isNavigating && isChallenger && trapState.currentStep === col) handleNavigate(1);
-                                }}
-                            >
-                                {hasTrapBottom && <span>💣</span>}
-                                {trapState.currentStep > col && <span>✅</span>}
-                                {isPlacing && isOpponent && !hasTrapBottom && <span>ALT</span>}
-                            </div>
+                            {[0, 1, 2].map(row => {
+                                const hasTrap = canSeeTrap && trapState.traps && trapState.traps[col] === row;
+                                const isPassed = trapState.currentStep > col;
+                                const isCurrent = trapState.currentStep === col;
+
+                                return (
+                                    <div
+                                        key={row}
+                                        className={`ts-trap-cell ${hasTrap ? 'has-trap' : ''} ${isNavigating && isCurrent && isChallenger ? 'selectable' : ''} ${isPassed ? 'passed' : ''}`}
+                                        onClick={() => {
+                                            if (isPlacing && isOpponent) handlePlaceTrap(col, row);
+                                            if (isNavigating && isChallenger && isCurrent) handleNavigate(row);
+                                        }}
+                                    >
+                                        {hasTrap && <span>💣</span>}
+                                        {isPassed && <span>✅</span>}
+                                        {isPlacing && isOpponent && !hasTrap && <span>{row === 0 ? 'ÜST' : row === 1 ? 'ORTA' : 'ALT'}</span>}
+                                    </div>
+                                );
+                            })}
                         </div>
                     );
                 })}

@@ -2254,3 +2254,28 @@
     .ts-score { font-size: 1.5rem; }
     .ts-vs { font-size: 1rem; }
 }
+
+/* ===== TRAP ARENA 3x3 UPDATE ===== */
+.ts-trap-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Adjust cell size for 3 rows if needed on small screens */
+@media (max-width: 600px) {
+    .ts-trap-cell {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .ts-trap-cell {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+}
