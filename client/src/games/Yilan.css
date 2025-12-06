@@ -23,51 +23,30 @@
     outline: none;
 }
 
-/* Touch Hint */
-.touch-hint {
+/* Right Panel - Leaderboard + Minimap */
+.right-panel {
     position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: rgba(255, 255, 255, 0.7);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    z-index: 50;
-    pointer-events: none;
-    animation: fadeOutHint 5s forwards;
-}
-
-@keyframes fadeOutHint {
-
-    0%,
-    70% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    top: 50px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
 }
 
 /* Leaderboard */
 .leaderboard {
-    position: absolute;
-    top: 60px;
-    right: 10px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
     border-radius: 10px;
-    padding: 10px 15px;
-    min-width: 180px;
-    z-index: 100;
+    padding: 8px 12px;
+    min-width: 150px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .leaderboard h3 {
-    margin: 0 0 8px 0;
-    font-size: 14px;
+    margin: 0 0 6px 0;
+    font-size: 12px;
     color: #ffd700;
     text-align: center;
     text-transform: uppercase;
@@ -77,9 +56,9 @@
 .leaderboard-entry {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 0;
-    font-size: 12px;
+    gap: 6px;
+    padding: 3px 0;
+    font-size: 11px;
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -90,19 +69,20 @@
 
 .leaderboard-entry.me {
     background: rgba(255, 215, 0, 0.2);
-    margin: 0 -10px;
-    padding: 4px 10px;
+    margin: 0 -8px;
+    padding: 3px 8px;
     border-radius: 4px;
 }
 
 .leaderboard-entry .rank {
     color: #888;
-    width: 20px;
+    width: 18px;
+    font-size: 10px;
 }
 
 .leaderboard-entry .color-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
 }
@@ -119,47 +99,43 @@
     font-weight: bold;
 }
 
+/* Minimap - Under leaderboard */
+.minimap {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    align-self: center;
+}
+
 /* My Score */
 .my-score {
     position: absolute;
-    top: 60px;
+    top: 50px;
     left: 10px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 18px;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 14px;
     font-weight: bold;
     color: white;
     z-index: 100;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Minimap */
-.minimap {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 120px;
-    height: 120px;
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 100;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* Boost Button */
+/* Boost Button - Left */
 .boost-btn {
     position: absolute;
     bottom: 30px;
     left: 30px;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
-    font-size: 12px;
+    font-size: 24px;
     font-weight: bold;
     border: 3px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
@@ -167,8 +143,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    gap: 2px;
     transition: transform 0.1s, box-shadow 0.2s;
     box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
     user-select: none;
@@ -181,7 +155,7 @@
 .boost-btn.active {
     transform: scale(0.95);
     background: linear-gradient(135deg, #ff6b6b, #e74c3c);
-    box-shadow: 0 0 30px rgba(231, 76, 60, 0.8), 0 0 60px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
 }
 
 .boost-btn.disabled {
@@ -189,6 +163,34 @@
     opacity: 0.5;
     cursor: not-allowed;
     box-shadow: none;
+}
+
+/* Joystick - Right */
+.joystick {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.joystick-knob {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ecdc4, #2ecc71);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 10px rgba(78, 205, 196, 0.5);
+    transition: transform 0.05s ease-out;
 }
 
 /* Death Overlay */
@@ -208,15 +210,12 @@
 }
 
 .death-overlay h2 {
-    font-size: 4rem;
-    color: #e74c3c;
-    margin: 0 0 20px 0;
-    text-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
-    animation: pulse 1s ease-in-out infinite;
+    font-size: 5rem;
+    margin: 0 0 10px 0;
 }
 
 .death-overlay p {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: white;
 }
 
@@ -230,87 +229,72 @@
     }
 }
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-/* Loading */
-.loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-size: 1.5rem;
-    color: white;
-    background: #1a1a2e;
-}
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .leaderboard {
-        top: 50px;
+    .right-panel {
+        top: 45px;
         right: 5px;
+    }
+
+    .leaderboard {
         min-width: 120px;
         padding: 6px 8px;
     }
 
     .leaderboard h3 {
-        font-size: 11px;
-        margin-bottom: 5px;
+        font-size: 10px;
+        margin-bottom: 4px;
     }
 
     .leaderboard-entry {
         font-size: 9px;
         gap: 4px;
-        padding: 3px 0;
+        padding: 2px 0;
     }
 
     .leaderboard-entry .color-dot {
-        width: 8px;
-        height: 8px;
-    }
-
-    .my-score {
-        top: 50px;
-        left: 5px;
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    .boost-btn {
-        width: 60px;
-        height: 60px;
-        bottom: 15px;
-        left: 15px;
-        font-size: 9px;
+        width: 6px;
+        height: 6px;
     }
 
     .minimap {
         width: 80px;
         height: 80px;
-        bottom: 15px;
-        right: 15px;
     }
 
-    .touch-hint {
-        bottom: 85px;
+    .my-score {
+        top: 45px;
+        left: 5px;
         font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .boost-btn {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        left: 20px;
+        font-size: 20px;
+    }
+
+    .joystick {
+        width: 80px;
+        height: 80px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .joystick-knob {
+        width: 32px;
+        height: 32px;
     }
 
     .death-overlay h2 {
-        font-size: 2rem;
+        font-size: 3rem;
     }
 
     .death-overlay p {
-        font-size: 0.9rem;
+        font-size: 1.2rem;
     }
 }
 
@@ -321,27 +305,33 @@
         padding: 4px 6px;
     }
 
-    .leaderboard h3 {
-        font-size: 10px;
-    }
-
     .leaderboard-entry {
-        font-size: 8px;
-    }
-
-    .my-score {
-        font-size: 10px;
-        padding: 5px 10px;
-    }
-
-    .boost-btn {
-        width: 50px;
-        height: 50px;
         font-size: 8px;
     }
 
     .minimap {
         width: 60px;
         height: 60px;
+    }
+
+    .my-score {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+
+    .boost-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .joystick {
+        width: 70px;
+        height: 70px;
+    }
+
+    .joystick-knob {
+        width: 28px;
+        height: 28px;
     }
 }
