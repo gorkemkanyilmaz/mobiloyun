@@ -12,6 +12,7 @@ function AmiralBatti({ room, playerId }) {
     const [hoverCell, setHoverCell] = useState(null);
     const [lastShot, setLastShot] = useState(null);
     const [selectedTarget, setSelectedTarget] = useState(null);
+    const [draggingShip, setDraggingShip] = useState(null); // Ship being repositioned
 
     // Listen for game state
     useEffect(() => {
@@ -54,7 +55,26 @@ function AmiralBatti({ room, playerId }) {
 
     // Handle ship placement
     const handlePlaceShip = useCallback((x, y) => {
-        if (!selectedShip || gameState?.phase !== 'PLACEMENT') return;
+        if (gameState?.phase !== 'PLACEMENT') return;
+
+        // If dragging a placed ship, remove it first then place at new location
+        if (draggingShip) {
+            socket.emit('gameAction', { type: 'REMOVE_SHIP', shipId: draggingShip.id });
+            setTimeout(() => {
+                socket.emit('gameAction', {
+                    type: 'PLACE_SHIP',
+                    shipType: draggingShip.type,
+                    x,
+                    y,
+                    isHorizontal
+                });
+            }, 50);
+            setDraggingShip(null);
+            setSelectedShip(null);
+            return;
+        }
+
+        if (!selectedShip) return;
 
         socket.emit('gameAction', {
             type: 'PLACE_SHIP',
@@ -64,7 +84,20 @@ function AmiralBatti({ room, playerId }) {
             isHorizontal
         });
         setSelectedShip(null);
-    }, [selectedShip, isHorizontal, gameState?.phase]);
+    }, [selectedShip, isHorizontal, gameState?.phase, draggingShip]);
+
+    // Handle clicking on a placed ship to drag it
+    const handleShipDrag = useCallback((shipId) => {
+        if (gameState?.phase !== 'PLACEMENT') return;
+
+        // Find the ship
+        const ship = gameState.myShips.find(s => s.id === shipId);
+        if (!ship) return;
+
+        const shipConfig = gameState.shipTypes[ship.type];
+        setDraggingShip({ ...ship, ...shipConfig });
+        setSelectedShip({ type: ship.type, ...shipConfig });
+    }, [gameState?.phase, gameState?.myShips, gameState?.shipTypes]);
 
     // Handle removing a ship
     const handleRemoveShip = useCallback((shipId) => {
@@ -175,9 +208,10 @@ function AmiralBatti({ room, playerId }) {
                         onCellClick={phase === 'PLACEMENT' ? handlePlaceShip : undefined}
                         onCellHover={phase === 'PLACEMENT' ? setHoverCell : undefined}
                         previewCells={previewCells}
-                        selectedShip={selectedShip}
+                        selectedShip={selectedShip || draggingShip}
                         ships={myShips}
-                        onShipClick={phase === 'PLACEMENT' ? handleRemoveShip : undefined}
+                        onShipClick={phase === 'PLACEMENT' ? handleShipDrag : undefined}
+                        draggingShipId={draggingShip?.id}
                     />
                 </div>
             </div>
@@ -291,7 +325,7 @@ function AmiralBatti({ room, playerId }) {
 }
 
 // Grid Component
-function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedShip, ships, onShipClick, isMyTurn, sunkShips }) {
+function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedShip, ships, onShipClick, isMyTurn, sunkShips, draggingShipId }) {
     const getPreviewClass = (x, y) => {
         if (!previewCells) return '';
         return previewCells.some(c => c.x === x && c.y === y) ? 'preview' : '';
@@ -335,6 +369,8 @@ function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedS
                                 key={`${x}-${y}`}
                                 className={`ab-cell 
                                     ${cell.hasShip && !isEnemy ? 'has-ship' : ''} 
+                                    ${cell.hasShip && !isEnemy && onShipClick ? 'draggable' : ''}
+                                    ${shipId === draggingShipId ? 'drag-source' : ''}
                                     ${cell.isHit ? 'hit' : ''} 
                                     ${cell.isMiss ? 'miss' : ''}
                                     ${isSunk ? 'sunk' : ''}

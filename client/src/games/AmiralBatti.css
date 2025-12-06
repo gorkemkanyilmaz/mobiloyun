@@ -253,37 +253,41 @@
 .ab-placement-controls {
     width: 100%;
     max-width: 400px;
-    padding: 15px;
+    padding: 10px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
     border: 1px solid rgba(0, 212, 255, 0.2);
-    margin-top: 15px;
+    margin-top: 10px;
+    box-sizing: border-box;
 }
 
 .ab-ships-panel h4 {
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
     color: #00d4ff;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    text-align: center;
 }
 
 .ab-ship-list {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+    justify-content: center;
 }
 
 .ab-ship-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 15px;
+    gap: 6px;
+    padding: 8px 10px;
     background: rgba(26, 26, 58, 0.6);
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 8px;
+    border-radius: 6px;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .ab-ship-btn:hover {
@@ -294,16 +298,17 @@
 .ab-ship-btn.selected {
     background: rgba(0, 212, 255, 0.3);
     border-color: #00d4ff;
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
 }
 
 .ab-ship-visual {
-    font-size: 0.8rem;
-    letter-spacing: -3px;
+    font-size: 0.7rem;
+    letter-spacing: -2px;
 }
 
 .ab-ship-name {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
 }
 
 .ab-all-placed {
@@ -315,16 +320,16 @@
 /* Actions */
 .ab-placement-actions {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .ab-rotate-btn,
 .ab-ready-btn {
     flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    padding: 10px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.2s ease;
     border: 2px solid;
@@ -513,31 +518,54 @@
 
 /* Mobile Responsive */
 @media (max-width: 480px) {
+    .ab-container {
+        padding: 5px;
+    }
+
     .ab-cell {
         width: 28px;
         height: 28px;
     }
 
     .ab-header h2 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .ab-phase-indicator {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .ab-placement-controls {
-        padding: 10px;
+        padding: 8px;
+        margin-top: 8px;
+    }
+
+    .ab-ships-panel h4 {
+        font-size: 0.75rem;
     }
 
     .ab-ship-btn {
-        padding: 8px 12px;
+        padding: 6px 8px;
+    }
+
+    .ab-ship-visual {
+        font-size: 0.6rem;
+    }
+
+    .ab-ship-name {
+        font-size: 0.65rem;
     }
 
     .ab-rotate-btn,
     .ab-ready-btn {
-        padding: 10px;
-        font-size: 0.8rem;
+        padding: 8px 4px;
+        font-size: 0.7rem;
+    }
+
+    .ab-player-status {
+        min-width: 100px;
+        padding: 6px 8px;
+        font-size: 0.7rem;
     }
 }
 
@@ -549,6 +577,27 @@
     }
 
     .ab-marker {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
+
+    .ab-ship-marker {
+        font-size: 0.6rem;
+    }
+
+    .ab-ship-visual {
+        display: none;
+    }
+}
+
+/* Draggable ship on grid */
+.ab-cell.has-ship.draggable {
+    cursor: grab;
+}
+
+.ab-cell.has-ship.draggable:active {
+    cursor: grabbing;
+}
+
+.ab-cell.drag-source {
+    opacity: 0.5;
 }
