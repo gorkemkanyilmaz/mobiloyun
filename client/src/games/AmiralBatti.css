@@ -1,38 +1,60 @@
 /* Amiral Battı (Battleship) - Modern Cyber-Neon Theme */
 
 .ab-container {
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100vh;
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
     color: white;
-    padding: 5px;
+    padding: 10px;
     font-family: 'Segoe UI', sans-serif;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-/* Header - Compact */
+/* Playing phase: fixed height, no scroll */
+.ab-container.playing {
+    height: 100vh;
+    height: 100dvh;
+    padding: 5px;
+    overflow: hidden;
+}
+
+/* Header */
 .ab-header {
     text-align: center;
+    padding: 8px;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    margin-bottom: 10px;
+}
+
+.ab-container.playing .ab-header {
     padding: 4px;
+    margin-bottom: 4px;
     flex-shrink: 0;
 }
 
 .ab-header h2 {
-    margin: 0;
-    font-size: 1rem;
+    margin: 0 0 5px 0;
+    font-size: 1.3rem;
     background: linear-gradient(90deg, #00d4ff, #ff3366);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
+.ab-container.playing .ab-header h2 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
 .ab-phase-indicator {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: #00d4ff;
     animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.ab-container.playing .ab-phase-indicator {
+    font-size: 0.8rem;
 }
 
 @keyframes pulse-glow {
@@ -58,31 +80,30 @@
     background: #0a0a1a;
 }
 
-/* Game Area - Fill remaining space */
+/* Game Area */
 .ab-game-area {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     width: 100%;
-    min-height: 0;
-    overflow: hidden;
 }
 
-/* Playing phase: both grids visible without scroll */
+/* Playing phase: compact layout */
 .ab-game-area.playing {
-    justify-content: space-between;
+    gap: 4px;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .ab-enemy-section,
 .ab-my-section {
     width: 100%;
     max-width: 400px;
-    flex-shrink: 0;
 }
 
-/* During playing phase, sections share space */
+/* During playing phase, sections share available space */
 .ab-game-area.playing .ab-enemy-section,
 .ab-game-area.playing .ab-my-section {
     flex: 1;
@@ -93,13 +114,18 @@
 
 .ab-section-label {
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     color: #888;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 8px;
+}
+
+.ab-game-area.playing .ab-section-label {
+    font-size: 0.7rem;
+    margin-bottom: 2px;
     flex-shrink: 0;
 }
 
@@ -119,26 +145,38 @@
     }
 }
 
-/* HUD Separator - Minimal */
+/* HUD Separator */
 .ab-hud-separator {
     width: 100%;
     text-align: center;
     color: rgba(0, 212, 255, 0.5);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    padding: 5px 0;
+}
+
+.ab-game-area.playing .ab-hud-separator {
     font-size: 0.55rem;
     letter-spacing: 2px;
     padding: 2px 0;
     flex-shrink: 0;
 }
 
-/* Grid - Responsive, fills container */
+/* Grid - Responsive full width */
 .ab-grid {
     background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    padding: 3px;
+    border-radius: 10px;
+    padding: 5px;
     border: 2px solid rgba(0, 212, 255, 0.2);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
     width: 100%;
     box-sizing: border-box;
+}
+
+/* Playing phase: grids fill available space */
+.ab-game-area.playing .ab-grid {
+    border-radius: 8px;
+    padding: 3px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -147,38 +185,53 @@
 
 .ab-grid.enemy {
     border-color: rgba(255, 51, 102, 0.3);
-    box-shadow: 0 0 15px rgba(255, 51, 102, 0.1);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.1);
 }
 
 .ab-grid-row {
     display: flex;
     width: 100%;
+}
+
+.ab-game-area.playing .ab-grid-row {
     flex: 1;
     min-height: 0;
 }
 
 .ab-cell {
     flex: 1;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(26, 26, 58, 0.5);
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     color: rgba(255, 255, 255, 0.3);
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     position: relative;
     min-width: 0;
+}
+
+/* Playing phase: remove aspect-ratio, let flex handle sizing */
+.ab-game-area.playing .ab-cell {
+    aspect-ratio: unset;
     min-height: 0;
+    font-size: 0.5rem;
 }
 
 .ab-cell.header,
 .ab-cell.row-header {
     background: transparent;
     border: none;
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     color: rgba(0, 212, 255, 0.7);
     font-weight: bold;
+}
+
+.ab-game-area.playing .ab-cell.header,
+.ab-game-area.playing .ab-cell.row-header {
+    font-size: 0.5rem;
 }
 
 .ab-cell.corner {
@@ -196,7 +249,7 @@
 .ab-cell.preview {
     background: rgba(0, 212, 255, 0.3);
     border-color: rgba(0, 212, 255, 0.8);
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 .ab-cell.clickable {
@@ -206,7 +259,7 @@
 .ab-cell.clickable:hover {
     background: rgba(255, 51, 102, 0.3);
     border-color: rgba(255, 51, 102, 0.8);
-    box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
     transform: scale(1.05);
     z-index: 10;
 }
@@ -219,7 +272,7 @@
 @keyframes hit-flash {
     0% {
         background: rgba(255, 255, 0, 0.8);
-        transform: scale(1.15);
+        transform: scale(1.2);
     }
 
     100% {
@@ -239,6 +292,10 @@
 
 /* Markers */
 .ab-marker {
+    font-size: 0.8rem;
+}
+
+.ab-game-area.playing .ab-marker {
     font-size: 0.65rem;
 }
 
@@ -278,6 +335,10 @@
 }
 
 .ab-ship-marker {
+    font-size: 0.7rem;
+}
+
+.ab-game-area.playing .ab-ship-marker {
     font-size: 0.55rem;
 }
 
@@ -285,37 +346,36 @@
 .ab-placement-controls {
     width: 100%;
     max-width: 400px;
-    padding: 6px;
+    padding: 8px;
     background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid rgba(0, 212, 255, 0.2);
     box-sizing: border-box;
-    flex-shrink: 0;
 }
 
 .ab-ships-panel h4 {
-    margin: 0 0 4px 0;
+    margin: 0 0 6px 0;
     color: #00d4ff;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     text-align: center;
 }
 
 .ab-ship-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 6px;
+    gap: 5px;
+    margin-bottom: 8px;
     justify-content: center;
 }
 
 .ab-ship-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 6px;
+    gap: 5px;
+    padding: 6px 8px;
     background: rgba(26, 26, 58, 0.6);
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 5px;
+    border-radius: 6px;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -330,39 +390,39 @@
 .ab-ship-btn.selected {
     background: rgba(0, 212, 255, 0.3);
     border-color: #00d4ff;
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
 }
 
 .ab-ship-visual {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
     letter-spacing: -2px;
 }
 
 .ab-ship-name {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     white-space: nowrap;
 }
 
 .ab-all-placed {
     text-align: center;
     color: #4ecdc4;
-    padding: 6px;
-    font-size: 0.75rem;
+    padding: 8px;
+    font-size: 0.85rem;
 }
 
 /* Actions */
 .ab-placement-actions {
     display: flex;
-    gap: 6px;
-    margin-bottom: 6px;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 .ab-rotate-btn,
 .ab-ready-btn {
     flex: 1;
-    padding: 6px 4px;
-    border-radius: 5px;
-    font-size: 0.65rem;
+    padding: 8px 6px;
+    border-radius: 6px;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s ease;
     border: 2px solid;
@@ -396,27 +456,27 @@
 .ab-ready-btn.ready {
     background: rgba(78, 205, 196, 0.6);
     border-color: #4ecdc4;
-    box-shadow: 0 0 10px rgba(78, 205, 196, 0.4);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.4);
 }
 
 /* Players Status */
 .ab-players-status {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 6px;
 }
 
 .ab-player-status {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    padding: 4px 8px;
+    gap: 8px;
+    padding: 6px 10px;
     background: rgba(100, 100, 100, 0.2);
-    border-radius: 5px;
-    font-size: 0.65rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
     flex: 1;
-    min-width: 100px;
+    min-width: 120px;
 }
 
 .ab-player-status.ready {
@@ -427,21 +487,31 @@
 /* Target Selector */
 .ab-target-selector {
     display: flex;
-    gap: 6px;
-    margin-bottom: 6px;
+    gap: 8px;
+    margin-bottom: 10px;
     justify-content: center;
+}
+
+.ab-game-area.playing .ab-target-selector {
+    gap: 6px;
+    margin-bottom: 4px;
     flex-shrink: 0;
 }
 
 .ab-target-btn {
-    padding: 4px 10px;
+    padding: 6px 12px;
     background: rgba(255, 51, 102, 0.2);
     border: 1px solid rgba(255, 51, 102, 0.4);
-    border-radius: 5px;
+    border-radius: 6px;
     color: white;
     cursor: pointer;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     transition: all 0.2s ease;
+}
+
+.ab-game-area.playing .ab-target-btn {
+    padding: 4px 10px;
+    font-size: 0.7rem;
 }
 
 .ab-target-btn:hover,
@@ -450,14 +520,28 @@
     border-color: #ff3366;
 }
 
-/* Game Info - Hidden during playing (shown in header) */
+/* Game Info */
 .ab-game-info {
-    display: none;
+    text-align: center;
+    padding: 10px;
 }
 
-/* Team Info */
+.ab-turn-indicator {
+    font-size: 1rem;
+}
+
+.ab-your-turn {
+    color: #4ecdc4;
+    animation: pulse-glow 1s ease-in-out infinite;
+    font-weight: bold;
+}
+
+.ab-waiting {
+    color: #888;
+}
+
 .ab-team-info {
-    margin-top: 4px;
+    margin-top: 8px;
 }
 
 .ab-team.blue {
@@ -495,40 +579,38 @@
 
 .ab-winner-popup {
     background: linear-gradient(135deg, #1a1a3a, #2a2a5a);
-    padding: 20px;
-    border-radius: 16px;
+    padding: 25px;
+    border-radius: 20px;
     text-align: center;
     border: 2px solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
-    max-width: 350px;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    max-width: 380px;
     width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
 }
 
 .ab-winner-popup h1 {
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    margin: 0 0 15px 0;
     color: #ffd700;
 }
 
 .ab-winner-name {
-    font-size: 1rem;
-    margin-bottom: 12px;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
 }
 
 .ab-stats h3 {
     color: #00d4ff;
-    margin: 0 0 8px 0;
-    font-size: 0.85rem;
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
 }
 
 .ab-stat-row {
     display: flex;
     justify-content: space-between;
-    padding: 4px 0;
+    padding: 6px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .ab-stat-name {
@@ -542,16 +624,16 @@
 /* End Game Buttons */
 .ab-end-buttons {
     display: flex;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .ab-new-game-btn,
 .ab-leave-btn {
     flex: 1;
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
     border: 2px solid;
@@ -581,17 +663,23 @@
 }
 
 /* Responsive */
+@media (max-width: 480px) {
+    .ab-container {
+        padding: 5px;
+    }
+}
+
 @media (max-width: 400px) {
-    .ab-marker {
+    .ab-game-area.playing .ab-marker {
         font-size: 0.55rem;
     }
 
-    .ab-ship-marker {
+    .ab-game-area.playing .ab-ship-marker {
         font-size: 0.45rem;
     }
 
-    .ab-cell.header,
-    .ab-cell.row-header {
+    .ab-game-area.playing .ab-cell.header,
+    .ab-game-area.playing .ab-cell.row-header {
         font-size: 0.4rem;
     }
 }
@@ -599,24 +687,5 @@
 @media (max-width: 360px) {
     .ab-ship-visual {
         display: none;
-    }
-}
-
-/* Landscape mode adjustments */
-@media (max-height: 500px) and (orientation: landscape) {
-    .ab-header {
-        padding: 2px;
-    }
-
-    .ab-header h2 {
-        font-size: 0.8rem;
-    }
-
-    .ab-phase-indicator {
-        font-size: 0.65rem;
-    }
-
-    .ab-section-label {
-        font-size: 0.55rem;
     }
 }

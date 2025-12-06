@@ -125,7 +125,7 @@ function AmiralBatti({ room, playerId }) {
     const { phase, myGrid, myShips, enemyViews, isMyTurn, currentTurnName, winner, gameStats, teams, myTeam, hasAllShips, amIReady } = gameState;
 
     return (
-        <div className="ab-container">
+        <div className={`ab-container ${phase === 'PLAYING' ? 'playing' : ''}`}>
             {/* Header */}
             <div className="ab-header">
                 <h2>🚢 Amiral Battı</h2>
