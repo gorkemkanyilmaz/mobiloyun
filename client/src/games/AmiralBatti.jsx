@@ -89,6 +89,17 @@ function AmiralBatti({ room, playerId }) {
         setLastShot({ x, y, time: Date.now() });
     }, [gameState?.isMyTurn, gameState?.phase, selectedTarget]);
 
+    // Handle restart game
+    const handleRestartGame = useCallback(() => {
+        socket.emit('gameAction', { type: 'RESTART_GAME' });
+    }, []);
+
+    // Handle leave game
+    const handleLeaveGame = useCallback(() => {
+        socket.emit('leaveRoom');
+        window.location.reload();
+    }, []);
+
     // Calculate preview cells for ship placement
     const previewCells = useMemo(() => {
         if (!selectedShip || !hoverCell) return [];
@@ -283,6 +294,15 @@ function AmiralBatti({ room, playerId }) {
                                 ))}
                             </div>
                         )}
+
+                        <div className="ab-end-buttons">
+                            <button className="ab-new-game-btn" onClick={handleRestartGame}>
+                                🔄 Yeni Oyun
+                            </button>
+                            <button className="ab-leave-btn" onClick={handleLeaveGame}>
+                                🚪 Oyundan Çık
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

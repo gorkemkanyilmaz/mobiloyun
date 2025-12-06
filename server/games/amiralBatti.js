@@ -450,6 +450,29 @@ class AmiralBattiGame {
         return count;
     }
 
+    // Restart the game
+    restartGame() {
+        console.log(`[AmiralBatti] Game restarting for room ${this.roomId}`);
+
+        // Reset game state
+        this.phase = this.PHASES.PLACEMENT;
+        this.winner = null;
+        this.gameStats = {};
+        this.currentTurnIndex = Math.floor(Math.random() * this.turnOrder.length);
+
+        // Reset all players
+        for (const [playerId, player] of this.players) {
+            player.grid = this.createEmptyGrid();
+            player.ships = [];
+            player.isReady = false;
+            player.hits = 0;
+            player.misses = 0;
+        }
+
+        this.broadcastState();
+        return { success: true };
+    }
+
     handleAction(socket, action) {
         const playerId = socket.id;
 
@@ -465,6 +488,9 @@ class AmiralBattiGame {
 
             case 'SHOOT':
                 return this.shoot(playerId, action.targetId, action.x, action.y);
+
+            case 'RESTART_GAME':
+                return this.restartGame();
 
             case 'VALIDATE_PLACEMENT':
                 return this.canPlaceShip(playerId, action.shipType, action.x, action.y, action.isHorizontal);

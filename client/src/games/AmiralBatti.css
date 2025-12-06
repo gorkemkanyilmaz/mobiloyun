@@ -523,7 +523,48 @@
     color: #888;
 }
 
-/* Responsive - cells fill container */
+/* End Game Buttons */
+.ab-end-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.ab-new-game-btn,
+.ab-leave-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid;
+    font-weight: bold;
+}
+
+.ab-new-game-btn {
+    background: rgba(78, 205, 196, 0.3);
+    border-color: rgba(78, 205, 196, 0.6);
+    color: #4ecdc4;
+}
+
+.ab-new-game-btn:hover {
+    background: rgba(78, 205, 196, 0.5);
+    transform: scale(1.02);
+}
+
+.ab-leave-btn {
+    background: rgba(255, 51, 102, 0.3);
+    border-color: rgba(255, 51, 102, 0.6);
+    color: #ff3366;
+}
+
+.ab-leave-btn:hover {
+    background: rgba(255, 51, 102, 0.5);
+    transform: scale(1.02);
+}
+
+/* Responsive */
 @media (max-width: 480px) {
     .ab-container {
         padding: 5px;
