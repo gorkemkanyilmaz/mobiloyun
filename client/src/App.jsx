@@ -9,7 +9,6 @@ import Chameleon from './games/Chameleon';
 import Uno from './games/Uno';
 import KimDahaYakin from './games/KimDahaYakin';
 import Taboo from './games/Taboo';
-import Yilan from './games/Yilan';
 import GamePausedOverlay from './components/GamePausedOverlay';
 import ReconnectingOverlay from './components/ReconnectingOverlay';
 import './App.css';
@@ -259,7 +258,6 @@ function App() {
             {room?.gameType === 'UNO' && <Uno room={room} playerId={playerId} />}
             {room?.gameType === 'KIM_DAHA_YAKIN' && <KimDahaYakin room={room} playerId={playerId} />}
             {room?.gameType === 'TABOO' && <Taboo room={room} playerId={playerId} />}
-            {room?.gameType === 'YILAN' && <Yilan room={room} playerId={playerId} />}
           </div>
         )}
       </main>
