@@ -8,6 +8,7 @@ const GAMES = [
     { id: 'TABOO', name: 'Taboo', icon: '🚫' },
     { id: 'KIM_DAHA_YAKIN', name: 'Kim Daha Yakın?', icon: '🔢' },
     { id: 'AMIRAL_BATTI', name: 'Amiral Battı', icon: '🚢' },
+    { id: 'TAHT_SAVASLARI', name: 'Taht Savaşları', icon: '👑' },
 ];
 
 function MainMenu({ onSelectGame }) {
