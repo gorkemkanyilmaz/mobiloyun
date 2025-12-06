@@ -7,6 +7,7 @@ const GAMES = [
     { id: 'UNO', name: 'Uno', icon: '🃏' },
     { id: 'TABOO', name: 'Taboo', icon: '🚫' },
     { id: 'KIM_DAHA_YAKIN', name: 'Kim Daha Yakın?', icon: '🔢' },
+    { id: 'AMIRAL_BATTI', name: 'Amiral Battı', icon: '🚢' },
 ];
 
 function MainMenu({ onSelectGame }) {

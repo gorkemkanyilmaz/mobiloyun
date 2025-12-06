@@ -1,0 +1,554 @@
+/* Amiral Battı (Battleship) - Modern Cyber-Neon Theme */
+
+.ab-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 100%);
+    color: white;
+    padding: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Header */
+.ab-header {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    margin-bottom: 15px;
+}
+
+.ab-header h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, #00d4ff, #ff3366);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ab-phase-indicator {
+    font-size: 1rem;
+    color: #00d4ff;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+    }
+
+    50% {
+        text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+    }
+}
+
+/* Loading */
+.ab-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: #00d4ff;
+    background: #0a0a1a;
+}
+
+/* Game Area */
+.ab-game-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.ab-enemy-section,
+.ab-my-section {
+    width: 100%;
+    max-width: 400px;
+}
+
+.ab-section-label {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.ab-target-icon {
+    animation: target-pulse 1s ease-in-out infinite;
+}
+
+@keyframes target-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* HUD Separator */
+.ab-hud-separator {
+    width: 100%;
+    text-align: center;
+    color: rgba(0, 212, 255, 0.5);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    padding: 5px 0;
+}
+
+/* Grid */
+.ab-grid {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 5px;
+    border: 2px solid rgba(0, 212, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.ab-grid.enemy {
+    border-color: rgba(255, 51, 102, 0.3);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.1);
+}
+
+.ab-grid-row {
+    display: flex;
+}
+
+.ab-cell {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(26, 26, 58, 0.5);
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.ab-cell.header,
+.ab-cell.row-header {
+    background: transparent;
+    border: none;
+    font-size: 0.7rem;
+    color: rgba(0, 212, 255, 0.7);
+    font-weight: bold;
+}
+
+.ab-cell.corner {
+    background: transparent;
+    border: none;
+}
+
+/* Cell states */
+.ab-cell.has-ship {
+    background: linear-gradient(135deg, rgba(0, 150, 200, 0.4), rgba(0, 100, 150, 0.4));
+    border-color: rgba(0, 212, 255, 0.5);
+}
+
+.ab-cell.preview {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: rgba(0, 212, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.ab-cell.clickable {
+    cursor: crosshair;
+}
+
+.ab-cell.clickable:hover {
+    background: rgba(255, 51, 102, 0.3);
+    border-color: rgba(255, 51, 102, 0.8);
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+.ab-cell.hit {
+    background: linear-gradient(135deg, rgba(255, 51, 102, 0.6), rgba(200, 0, 50, 0.6));
+    animation: hit-flash 0.5s ease-out;
+}
+
+@keyframes hit-flash {
+    0% {
+        background: rgba(255, 255, 0, 0.8);
+        transform: scale(1.3);
+    }
+
+    100% {
+        background: linear-gradient(135deg, rgba(255, 51, 102, 0.6), rgba(200, 0, 50, 0.6));
+        transform: scale(1);
+    }
+}
+
+.ab-cell.miss {
+    background: rgba(100, 100, 150, 0.3);
+}
+
+.ab-cell.sunk {
+    background: linear-gradient(135deg, rgba(80, 80, 80, 0.8), rgba(50, 50, 50, 0.8));
+    border-color: rgba(100, 100, 100, 0.5);
+}
+
+/* Markers */
+.ab-marker {
+    font-size: 1rem;
+}
+
+.ab-marker.hit {
+    animation: explosion 0.4s ease-out;
+}
+
+@keyframes explosion {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.ab-marker.miss {
+    animation: splash 0.4s ease-out;
+}
+
+@keyframes splash {
+    0% {
+        transform: scale(0) rotate(0deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+.ab-ship-marker {
+    font-size: 0.8rem;
+}
+
+/* Placement Controls */
+.ab-placement-controls {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    margin-top: 15px;
+}
+
+.ab-ships-panel h4 {
+    margin: 0 0 10px 0;
+    color: #00d4ff;
+    font-size: 0.9rem;
+}
+
+.ab-ship-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.ab-ship-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background: rgba(26, 26, 58, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ab-ship-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.6);
+}
+
+.ab-ship-btn.selected {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.ab-ship-visual {
+    font-size: 0.8rem;
+    letter-spacing: -3px;
+}
+
+.ab-ship-name {
+    font-size: 0.85rem;
+}
+
+.ab-all-placed {
+    text-align: center;
+    color: #4ecdc4;
+    padding: 10px;
+}
+
+/* Actions */
+.ab-placement-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ab-rotate-btn,
+.ab-ready-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid;
+}
+
+.ab-rotate-btn {
+    background: rgba(100, 100, 150, 0.3);
+    border-color: rgba(100, 100, 150, 0.5);
+    color: white;
+}
+
+.ab-rotate-btn:hover {
+    background: rgba(100, 100, 150, 0.5);
+}
+
+.ab-ready-btn {
+    background: rgba(78, 205, 196, 0.3);
+    border-color: rgba(78, 205, 196, 0.5);
+    color: white;
+}
+
+.ab-ready-btn:hover:not(:disabled) {
+    background: rgba(78, 205, 196, 0.5);
+}
+
+.ab-ready-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ab-ready-btn.ready {
+    background: rgba(78, 205, 196, 0.6);
+    border-color: #4ecdc4;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.4);
+}
+
+/* Players Status */
+.ab-players-status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ab-player-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(100, 100, 100, 0.2);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    flex: 1;
+    min-width: 140px;
+}
+
+.ab-player-status.ready {
+    background: rgba(78, 205, 196, 0.2);
+    border: 1px solid rgba(78, 205, 196, 0.4);
+}
+
+/* Target Selector */
+.ab-target-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
+.ab-target-btn {
+    padding: 6px 12px;
+    background: rgba(255, 51, 102, 0.2);
+    border: 1px solid rgba(255, 51, 102, 0.4);
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.ab-target-btn:hover,
+.ab-target-btn.active {
+    background: rgba(255, 51, 102, 0.4);
+    border-color: #ff3366;
+}
+
+/* Game Info */
+.ab-game-info {
+    text-align: center;
+    padding: 15px;
+}
+
+.ab-turn-indicator {
+    font-size: 1.1rem;
+}
+
+.ab-your-turn {
+    color: #4ecdc4;
+    animation: pulse-glow 1s ease-in-out infinite;
+    font-weight: bold;
+}
+
+.ab-waiting {
+    color: #888;
+}
+
+.ab-team-info {
+    margin-top: 10px;
+}
+
+.ab-team.blue {
+    color: #00d4ff;
+}
+
+.ab-team.red {
+    color: #ff3366;
+}
+
+/* Winner Overlay */
+.ab-winner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fade-in 0.5s ease;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.ab-winner-popup {
+    background: linear-gradient(135deg, #1a1a3a, #2a2a5a);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+.ab-winner-popup h1 {
+    font-size: 2rem;
+    margin: 0 0 20px 0;
+    color: #ffd700;
+}
+
+.ab-winner-name {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.ab-stats h3 {
+    color: #00d4ff;
+    margin: 0 0 15px 0;
+}
+
+.ab-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+.ab-stat-name {
+    font-weight: bold;
+}
+
+.ab-stat-detail {
+    color: #888;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .ab-cell {
+        width: 28px;
+        height: 28px;
+    }
+
+    .ab-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .ab-phase-indicator {
+        font-size: 0.85rem;
+    }
+
+    .ab-placement-controls {
+        padding: 10px;
+    }
+
+    .ab-ship-btn {
+        padding: 8px 12px;
+    }
+
+    .ab-rotate-btn,
+    .ab-ready-btn {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .ab-cell {
+        width: 24px;
+        height: 24px;
+        font-size: 0.5rem;
+    }
+
+    .ab-marker {
+        font-size: 0.8rem;
+    }
+}
