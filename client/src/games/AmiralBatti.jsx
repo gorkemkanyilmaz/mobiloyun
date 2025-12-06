@@ -94,10 +94,13 @@ function AmiralBatti({ room, playerId }) {
         socket.emit('gameAction', { type: 'RESTART_GAME' });
     }, []);
 
-    // Handle leave game
+    // Handle leave game - fully disconnect like the top-right leave button
     const handleLeaveGame = useCallback(() => {
-        socket.emit('leaveRoom');
-        window.location.reload();
+        socket.disconnect();
+        localStorage.removeItem('ph_roomId');
+        localStorage.removeItem('ph_playerId');
+        socket.connect();
+        window.location.href = '/';
     }, []);
 
     // Calculate preview cells for ship placement
@@ -134,7 +137,7 @@ function AmiralBatti({ room, playerId }) {
             </div>
 
             {/* Main Game Area */}
-            <div className="ab-game-area">
+            <div className={`ab-game-area ${phase === 'PLAYING' ? 'playing' : ''}`}>
                 {/* Enemy Grid (Top) - Only show during PLAYING */}
                 {phase === 'PLAYING' && selectedTarget && enemyViews[selectedTarget] && (
                     <div className="ab-enemy-section">
