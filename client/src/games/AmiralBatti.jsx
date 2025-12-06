@@ -12,7 +12,6 @@ function AmiralBatti({ room, playerId }) {
     const [hoverCell, setHoverCell] = useState(null);
     const [lastShot, setLastShot] = useState(null);
     const [selectedTarget, setSelectedTarget] = useState(null);
-    const [draggingShip, setDraggingShip] = useState(null); // Ship being repositioned
 
     // Listen for game state
     useEffect(() => {
@@ -55,26 +54,7 @@ function AmiralBatti({ room, playerId }) {
 
     // Handle ship placement
     const handlePlaceShip = useCallback((x, y) => {
-        if (gameState?.phase !== 'PLACEMENT') return;
-
-        // If dragging a placed ship, remove it first then place at new location
-        if (draggingShip) {
-            socket.emit('gameAction', { type: 'REMOVE_SHIP', shipId: draggingShip.id });
-            setTimeout(() => {
-                socket.emit('gameAction', {
-                    type: 'PLACE_SHIP',
-                    shipType: draggingShip.type,
-                    x,
-                    y,
-                    isHorizontal
-                });
-            }, 50);
-            setDraggingShip(null);
-            setSelectedShip(null);
-            return;
-        }
-
-        if (!selectedShip) return;
+        if (!selectedShip || gameState?.phase !== 'PLACEMENT') return;
 
         socket.emit('gameAction', {
             type: 'PLACE_SHIP',
@@ -84,22 +64,9 @@ function AmiralBatti({ room, playerId }) {
             isHorizontal
         });
         setSelectedShip(null);
-    }, [selectedShip, isHorizontal, gameState?.phase, draggingShip]);
+    }, [selectedShip, isHorizontal, gameState?.phase]);
 
-    // Handle clicking on a placed ship to drag it
-    const handleShipDrag = useCallback((shipId) => {
-        if (gameState?.phase !== 'PLACEMENT') return;
-
-        // Find the ship
-        const ship = gameState.myShips.find(s => s.id === shipId);
-        if (!ship) return;
-
-        const shipConfig = gameState.shipTypes[ship.type];
-        setDraggingShip({ ...ship, ...shipConfig });
-        setSelectedShip({ type: ship.type, ...shipConfig });
-    }, [gameState?.phase, gameState?.myShips, gameState?.shipTypes]);
-
-    // Handle removing a ship
+    // Handle removing a ship (click on placed ship to remove)
     const handleRemoveShip = useCallback((shipId) => {
         socket.emit('gameAction', { type: 'REMOVE_SHIP', shipId });
     }, []);
@@ -208,65 +175,64 @@ function AmiralBatti({ room, playerId }) {
                         onCellClick={phase === 'PLACEMENT' ? handlePlaceShip : undefined}
                         onCellHover={phase === 'PLACEMENT' ? setHoverCell : undefined}
                         previewCells={previewCells}
-                        selectedShip={selectedShip || draggingShip}
+                        selectedShip={selectedShip}
                         ships={myShips}
-                        onShipClick={phase === 'PLACEMENT' ? handleShipDrag : undefined}
-                        draggingShipId={draggingShip?.id}
+                        onShipClick={phase === 'PLACEMENT' ? handleRemoveShip : undefined}
                     />
                 </div>
-            </div>
 
-            {/* Placement Controls */}
-            {phase === 'PLACEMENT' && (
-                <div className="ab-placement-controls">
-                    <div className="ab-ships-panel">
-                        <h4>Gemiler</h4>
-                        <div className="ab-ship-list">
-                            {unplacedShips.map((ship, i) => (
-                                <button
-                                    key={`${ship.type}-${i}`}
-                                    className={`ab-ship-btn ${selectedShip?.type === ship.type ? 'selected' : ''}`}
-                                    onClick={() => setSelectedShip(ship)}
-                                >
-                                    <span className="ab-ship-visual">
-                                        {'🟦'.repeat(ship.size)}
-                                    </span>
-                                    <span className="ab-ship-name">{ship.name}</span>
-                                </button>
+                {/* Placement Controls - Right below grid */}
+                {phase === 'PLACEMENT' && (
+                    <div className="ab-placement-controls">
+                        <div className="ab-ships-panel">
+                            <h4>Gemiler</h4>
+                            <div className="ab-ship-list">
+                                {unplacedShips.map((ship, i) => (
+                                    <button
+                                        key={`${ship.type}-${i}`}
+                                        className={`ab-ship-btn ${selectedShip?.type === ship.type ? 'selected' : ''}`}
+                                        onClick={() => setSelectedShip(ship)}
+                                    >
+                                        <span className="ab-ship-visual">
+                                            {'🟦'.repeat(ship.size)}
+                                        </span>
+                                        <span className="ab-ship-name">{ship.name}</span>
+                                    </button>
+                                ))}
+                                {unplacedShips.length === 0 && (
+                                    <div className="ab-all-placed">✅ Tüm gemiler yerleştirildi!</div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="ab-placement-actions">
+                            <button
+                                className={`ab-rotate-btn ${isHorizontal ? 'horizontal' : 'vertical'}`}
+                                onClick={() => setIsHorizontal(!isHorizontal)}
+                            >
+                                🔄 {isHorizontal ? 'Yatay' : 'Dikey'}
+                            </button>
+
+                            <button
+                                className={`ab-ready-btn ${amIReady ? 'ready' : ''}`}
+                                onClick={handleReady}
+                                disabled={!hasAllShips}
+                            >
+                                {amIReady ? '❌ Hazır Değilim' : '✅ Hazırım'}
+                            </button>
+                        </div>
+
+                        <div className="ab-players-status">
+                            {gameState.players.map(p => (
+                                <div key={p.id} className={`ab-player-status ${p.isReady ? 'ready' : ''}`}>
+                                    <span>{p.name}</span>
+                                    <span>{p.isReady ? '✅' : `${p.shipsPlaced}/6`}</span>
+                                </div>
                             ))}
-                            {unplacedShips.length === 0 && (
-                                <div className="ab-all-placed">✅ Tüm gemiler yerleştirildi!</div>
-                            )}
                         </div>
                     </div>
-
-                    <div className="ab-placement-actions">
-                        <button
-                            className={`ab-rotate-btn ${isHorizontal ? 'horizontal' : 'vertical'}`}
-                            onClick={() => setIsHorizontal(!isHorizontal)}
-                        >
-                            🔄 {isHorizontal ? 'Yatay' : 'Dikey'}
-                        </button>
-
-                        <button
-                            className={`ab-ready-btn ${amIReady ? 'ready' : ''}`}
-                            onClick={handleReady}
-                            disabled={!hasAllShips}
-                        >
-                            {amIReady ? '❌ Hazır Değilim' : '✅ Hazırım'}
-                        </button>
-                    </div>
-
-                    <div className="ab-players-status">
-                        {gameState.players.map(p => (
-                            <div key={p.id} className={`ab-player-status ${p.isReady ? 'ready' : ''}`}>
-                                <span>{p.name}</span>
-                                <span>{p.isReady ? '✅' : `${p.shipsPlaced}/6`}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
 
             {/* Game Info during PLAYING */}
             {phase === 'PLAYING' && (
@@ -325,7 +291,7 @@ function AmiralBatti({ room, playerId }) {
 }
 
 // Grid Component
-function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedShip, ships, onShipClick, isMyTurn, sunkShips, draggingShipId }) {
+function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedShip, ships, onShipClick, isMyTurn, sunkShips }) {
     const getPreviewClass = (x, y) => {
         if (!previewCells) return '';
         return previewCells.some(c => c.x === x && c.y === y) ? 'preview' : '';
@@ -369,8 +335,6 @@ function Grid({ grid, isEnemy, onCellClick, onCellHover, previewCells, selectedS
                                 key={`${x}-${y}`}
                                 className={`ab-cell 
                                     ${cell.hasShip && !isEnemy ? 'has-ship' : ''} 
-                                    ${cell.hasShip && !isEnemy && onShipClick ? 'draggable' : ''}
-                                    ${shipId === draggingShipId ? 'drag-source' : ''}
                                     ${cell.isHit ? 'hit' : ''} 
                                     ${cell.isMiss ? 'miss' : ''}
                                     ${isSunk ? 'sunk' : ''}
