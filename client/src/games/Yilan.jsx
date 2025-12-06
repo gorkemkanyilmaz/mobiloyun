@@ -5,93 +5,145 @@ import './Yilan.css';
 function Yilan({ room, playerId }) {
     const canvasRef = useRef(null);
     const minimapRef = useRef(null);
-    const [gameState, setGameState] = useState(null);
+
+    // Server state and interpolation
+    const serverStateRef = useRef(null);
+    const prevServerStateRef = useRef(null);
+    const lastServerUpdateRef = useRef(0);
+    const interpolatedSnakesRef = useRef(new Map());
+
+    // UI state (only these cause re-renders)
+    const [isAlive, setIsAlive] = useState(true);
+    const [respawnIn, setRespawnIn] = useState(0);
+    const [leaderboard, setLeaderboard] = useState([]);
+    const [myLength, setMyLength] = useState(0);
     const [isBoosting, setIsBoosting] = useState(false);
-    const targetRef = useRef({ x: 0, y: 0 });
-    const cameraRef = useRef({ x: 0, y: 0 });
+
+    // Control state
+    const isTouchingRef = useRef(false);
+    const targetAngleRef = useRef(0);
+    const cameraRef = useRef({ x: 750, y: 750 });
     const lastEmitRef = useRef(0);
+    const animationRef = useRef(null);
 
-    // Handle game state updates
+    // Handle game state updates with interpolation setup
     useEffect(() => {
-        socket.on('gameState', (state) => {
-            setGameState(state);
-        });
+        const handleGameState = (state) => {
+            // Store previous state for interpolation
+            prevServerStateRef.current = serverStateRef.current;
+            serverStateRef.current = state;
+            lastServerUpdateRef.current = performance.now();
 
+            // Update UI state sparingly
+            const mySnake = state.snakes.find(s => s.id === state.mySnakeId);
+            setIsAlive(mySnake?.isAlive ?? false);
+            setRespawnIn(state.respawnIn || 0);
+            setLeaderboard(state.leaderboard || []);
+            setMyLength(mySnake?.segments?.length || 0);
+        };
+
+        socket.on('gameState', handleGameState);
         socket.emit('getGameState');
 
         return () => {
-            socket.off('gameState');
+            socket.off('gameState', handleGameState);
         };
     }, []);
 
-    // Handle touch/mouse input
-    const handlePointerMove = useCallback((clientX, clientY) => {
-        if (!canvasRef.current || !gameState) return;
+    // Calculate target from touch/mouse
+    const updateTarget = useCallback((clientX, clientY) => {
+        if (!canvasRef.current) return;
 
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const dx = clientX - rect.left - centerX;
+        const dy = clientY - rect.top - centerY;
 
-        // Convert screen position to world position
-        const screenX = clientX - rect.left;
-        const screenY = clientY - rect.top;
+        targetAngleRef.current = Math.atan2(dy, dx);
+    }, []);
 
-        // Calculate world position based on camera
-        const worldX = screenX + cameraRef.current.x - canvas.width / 2;
-        const worldY = screenY + cameraRef.current.y - canvas.height / 2;
+    // Send movement
+    const sendMovement = useCallback(() => {
+        if (!isTouchingRef.current || !serverStateRef.current) return;
 
-        targetRef.current = { x: worldX, y: worldY };
-
-        // Throttle emit to ~30 times per second
         const now = Date.now();
-        if (now - lastEmitRef.current > 33) {
-            lastEmitRef.current = now;
-            socket.emit('gameAction', {
-                type: 'MOVE',
-                x: worldX,
-                y: worldY
-            });
+        if (now - lastEmitRef.current < 50) return;
+        lastEmitRef.current = now;
+
+        const camera = cameraRef.current;
+        const targetX = camera.x + Math.cos(targetAngleRef.current) * 500;
+        const targetY = camera.y + Math.sin(targetAngleRef.current) * 500;
+
+        socket.emit('gameAction', { type: 'MOVE', x: targetX, y: targetY });
+    }, []);
+
+    // Touch handlers
+    const handleTouchStart = useCallback((e) => {
+        e.preventDefault();
+        isTouchingRef.current = true;
+        if (e.touches.length > 0) {
+            updateTarget(e.touches[0].clientX, e.touches[0].clientY);
+            sendMovement();
         }
-    }, [gameState]);
+    }, [updateTarget, sendMovement]);
 
     const handleTouchMove = useCallback((e) => {
         e.preventDefault();
         if (e.touches.length > 0) {
-            const touch = e.touches[0];
-            handlePointerMove(touch.clientX, touch.clientY);
+            updateTarget(e.touches[0].clientX, e.touches[0].clientY);
+            sendMovement();
         }
-    }, [handlePointerMove]);
+    }, [updateTarget, sendMovement]);
+
+    const handleTouchEnd = useCallback((e) => {
+        e.preventDefault();
+        isTouchingRef.current = false;
+    }, []);
+
+    const handleMouseDown = useCallback((e) => {
+        isTouchingRef.current = true;
+        updateTarget(e.clientX, e.clientY);
+        sendMovement();
+    }, [updateTarget, sendMovement]);
 
     const handleMouseMove = useCallback((e) => {
-        handlePointerMove(e.clientX, e.clientY);
-    }, [handlePointerMove]);
+        if (!isTouchingRef.current) return;
+        updateTarget(e.clientX, e.clientY);
+        sendMovement();
+    }, [updateTarget, sendMovement]);
 
-    const handleTouchStart = useCallback((e) => {
-        e.preventDefault();
-        if (e.touches.length > 0) {
-            const touch = e.touches[0];
-            handlePointerMove(touch.clientX, touch.clientY);
-        }
-    }, [handlePointerMove]);
+    const handleMouseUp = useCallback(() => {
+        isTouchingRef.current = false;
+    }, []);
 
     // Boost handlers
-    const handleBoostStart = useCallback(() => {
+    const handleBoostStart = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
         setIsBoosting(true);
         socket.emit('gameAction', { type: 'BOOST_START' });
     }, []);
 
-    const handleBoostEnd = useCallback(() => {
+    const handleBoostEnd = useCallback((e) => {
+        if (e) e.preventDefault();
         setIsBoosting(false);
         socket.emit('gameAction', { type: 'BOOST_END' });
     }, []);
 
-    // Canvas rendering
+    // Main render loop with interpolation
     useEffect(() => {
-        if (!canvasRef.current || !gameState) return;
-
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
+        const minimap = minimapRef.current;
+        if (!canvas || !minimap) return;
 
-        // Set canvas size
+        const ctx = canvas.getContext('2d', { alpha: false });
+        const minimapCtx = minimap.getContext('2d');
+
+        // Disable image smoothing for sharper rendering
+        ctx.imageSmoothingEnabled = false;
+
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -99,163 +151,247 @@ function Yilan({ room, playerId }) {
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Find my snake for camera
-        const mySnake = gameState.snakes.find(s => s.id === gameState.mySnakeId);
-        if (mySnake && mySnake.isAlive && mySnake.segments.length > 0) {
-            const head = mySnake.segments[0];
-            // Smooth camera follow
-            cameraRef.current.x += (head.x - cameraRef.current.x) * 0.1;
-            cameraRef.current.y += (head.y - cameraRef.current.y) * 0.1;
-        }
+        let lastFrameTime = performance.now();
 
-        const camera = cameraRef.current;
+        const render = (currentTime) => {
+            const deltaTime = (currentTime - lastFrameTime) / 1000;
+            lastFrameTime = currentTime;
 
-        // Clear canvas with dark outside-world color
-        ctx.fillStyle = '#0d0d1a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Calculate world rect on screen
-        const worldScreenX = canvas.width / 2 - camera.x;
-        const worldScreenY = canvas.height / 2 - camera.y;
-
-        // Draw game world with clipping
-        ctx.save();
-
-        // Clip to world boundaries
-        ctx.beginPath();
-        ctx.rect(worldScreenX, worldScreenY, gameState.worldWidth, gameState.worldHeight);
-        ctx.clip();
-
-        // Fill world background
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(worldScreenX, worldScreenY, gameState.worldWidth, gameState.worldHeight);
-
-        // Draw hexagonal background pattern (only inside world)
-        drawHexGrid(ctx, camera, canvas.width, canvas.height, gameState.worldWidth, gameState.worldHeight);
-
-        // Translate for world objects
-        ctx.translate(worldScreenX, worldScreenY);
-
-        // Draw orbs
-        gameState.orbs.forEach(orb => {
-            drawOrb(ctx, orb);
-        });
-
-        // Draw snakes
-        gameState.snakes.forEach(snake => {
-            if (snake.isAlive) {
-                drawSnake(ctx, snake, snake.id === gameState.mySnakeId);
+            const state = serverStateRef.current;
+            if (!state) {
+                animationRef.current = requestAnimationFrame(render);
+                return;
             }
-        });
 
-        ctx.restore();
+            // Calculate interpolation factor (0 to 1)
+            const timeSinceUpdate = currentTime - lastServerUpdateRef.current;
+            const serverTickMs = 16.67; // ~60fps from server
+            const t = Math.min(timeSinceUpdate / serverTickMs, 1);
 
-        // Draw world boundary line
-        ctx.strokeStyle = 'rgba(255, 100, 100, 0.8)';
-        ctx.lineWidth = 4;
-        ctx.strokeRect(worldScreenX, worldScreenY, gameState.worldWidth, gameState.worldHeight);
+            // Interpolate snake positions
+            const interpolatedSnakes = [];
+            for (let i = 0; i < state.snakes.length; i++) {
+                const snake = state.snakes[i];
+                if (!snake.isAlive || snake.segments.length === 0) {
+                    interpolatedSnakes.push(snake);
+                    continue;
+                }
 
-        return () => {
-            window.removeEventListener('resize', resizeCanvas);
-        };
-    }, [gameState, playerId]);
+                // Get previous snake position if available
+                let prevSnake = null;
+                if (prevServerStateRef.current) {
+                    prevSnake = prevServerStateRef.current.snakes.find(s => s.id === snake.id);
+                }
 
-    // Minimap rendering
-    useEffect(() => {
-        if (!minimapRef.current || !gameState) return;
+                if (prevSnake && prevSnake.segments.length > 0) {
+                    // Interpolate segments
+                    const interpolatedSegments = [];
+                    const maxLen = Math.min(snake.segments.length, prevSnake.segments.length);
 
-        const minimap = minimapRef.current;
-        const ctx = minimap.getContext('2d');
-        const size = minimap.width;
+                    for (let j = 0; j < snake.segments.length; j++) {
+                        if (j < maxLen) {
+                            interpolatedSegments.push({
+                                x: prevSnake.segments[j].x + (snake.segments[j].x - prevSnake.segments[j].x) * t,
+                                y: prevSnake.segments[j].y + (snake.segments[j].y - prevSnake.segments[j].y) * t
+                            });
+                        } else {
+                            interpolatedSegments.push(snake.segments[j]);
+                        }
+                    }
 
-        // Clear
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, size, size);
+                    interpolatedSnakes.push({
+                        ...snake,
+                        segments: interpolatedSegments
+                    });
+                } else {
+                    interpolatedSnakes.push(snake);
+                }
+            }
 
-        // Scale factor
-        const scale = size / gameState.worldWidth;
+            // Find my snake for camera
+            const mySnake = interpolatedSnakes.find(s => s.id === state.mySnakeId);
+            if (mySnake?.isAlive && mySnake.segments.length > 0) {
+                const head = mySnake.segments[0];
+                cameraRef.current.x += (head.x - cameraRef.current.x) * 0.2;
+                cameraRef.current.y += (head.y - cameraRef.current.y) * 0.2;
+            }
 
-        // Draw border
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(0, 0, size, size);
+            const camera = cameraRef.current;
+            const worldWidth = state.worldWidth;
+            const worldHeight = state.worldHeight;
 
-        // Draw all snakes as dots
-        gameState.snakes.forEach(snake => {
-            if (!snake.isAlive || snake.segments.length === 0) return;
+            // Clear
+            ctx.fillStyle = '#0d0d1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const head = snake.segments[0];
-            const x = head.x * scale;
-            const y = head.y * scale;
-            const isMe = snake.id === gameState.mySnakeId;
-            const dotSize = isMe ? 6 : 4;
+            const worldX = canvas.width / 2 - camera.x;
+            const worldY = canvas.height / 2 - camera.y;
 
-            // Glow for current player
-            if (isMe) {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            // Clip to world
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(Math.max(0, worldX), Math.max(0, worldY),
+                Math.min(canvas.width, worldWidth), Math.min(canvas.height, worldHeight));
+            ctx.clip();
+
+            // World background
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(worldX, worldY, worldWidth, worldHeight);
+
+            // Simple grid instead of hexagons for performance
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+            ctx.lineWidth = 1;
+            const gridSize = 80;
+            const startGridX = Math.floor(camera.x / gridSize) * gridSize;
+            const startGridY = Math.floor(camera.y / gridSize) * gridSize;
+
+            ctx.beginPath();
+            for (let gx = startGridX - canvas.width; gx < startGridX + canvas.width; gx += gridSize) {
+                if (gx >= 0 && gx <= worldWidth) {
+                    const sx = gx - camera.x + canvas.width / 2;
+                    ctx.moveTo(sx, Math.max(0, worldY));
+                    ctx.lineTo(sx, Math.min(canvas.height, worldY + worldHeight));
+                }
+            }
+            for (let gy = startGridY - canvas.height; gy < startGridY + canvas.height; gy += gridSize) {
+                if (gy >= 0 && gy <= worldHeight) {
+                    const sy = gy - camera.y + canvas.height / 2;
+                    ctx.moveTo(Math.max(0, worldX), sy);
+                    ctx.lineTo(Math.min(canvas.width, worldX + worldWidth), sy);
+                }
+            }
+            ctx.stroke();
+
+            ctx.translate(worldX, worldY);
+
+            // Draw orbs - simple circles
+            const orbs = state.orbs;
+            for (let i = 0; i < orbs.length; i++) {
+                const orb = orbs[i];
+                const sx = orb.x - camera.x + canvas.width / 2;
+                const sy = orb.y - camera.y + canvas.height / 2;
+                if (sx < -15 || sx > canvas.width + 15 || sy < -15 || sy > canvas.height + 15) continue;
+
+                ctx.fillStyle = orb.color;
                 ctx.beginPath();
-                ctx.arc(x, y, dotSize + 2, 0, Math.PI * 2);
+                ctx.arc(orb.x, orb.y, orb.size, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            ctx.fillStyle = snake.color;
-            ctx.beginPath();
-            ctx.arc(x, y, dotSize, 0, Math.PI * 2);
-            ctx.fill();
-        });
+            // Draw snakes
+            for (let i = 0; i < interpolatedSnakes.length; i++) {
+                const snake = interpolatedSnakes[i];
+                if (!snake.isAlive || snake.segments.length === 0) continue;
 
-    }, [gameState]);
+                const segments = snake.segments;
+                const head = segments[0];
 
-    // Animation loop
-    useEffect(() => {
-        let animationId;
+                // Check if visible
+                const hsx = head.x - camera.x + canvas.width / 2;
+                const hsy = head.y - camera.y + canvas.height / 2;
+                if (hsx < -200 || hsx > canvas.width + 200 || hsy < -200 || hsy > canvas.height + 200) continue;
 
-        const animate = () => {
-            // Trigger re-render for smooth camera
-            setGameState(prev => prev ? { ...prev } : prev);
-            animationId = requestAnimationFrame(animate);
+                // Draw body as connected circles
+                ctx.fillStyle = snake.color;
+                for (let j = segments.length - 1; j >= 0; j--) {
+                    const seg = segments[j];
+                    const radius = 5 + (j / segments.length) * 7;
+                    ctx.beginPath();
+                    ctx.arc(seg.x, seg.y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Eyes
+                let angle = 0;
+                if (segments.length > 1) {
+                    angle = Math.atan2(head.y - segments[1].y, head.x - segments[1].x);
+                }
+
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(head.x + Math.cos(angle + 0.5) * 4, head.y + Math.sin(angle + 0.5) * 4, 3, 0, Math.PI * 2);
+                ctx.arc(head.x + Math.cos(angle - 0.5) * 4, head.y + Math.sin(angle - 0.5) * 4, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(head.x + Math.cos(angle + 0.5) * 4 + Math.cos(angle), head.y + Math.sin(angle + 0.5) * 4 + Math.sin(angle), 1.5, 0, Math.PI * 2);
+                ctx.arc(head.x + Math.cos(angle - 0.5) * 4 + Math.cos(angle), head.y + Math.sin(angle - 0.5) * 4 + Math.sin(angle), 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Name
+                ctx.fillStyle = 'white';
+                ctx.font = '11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(snake.name, head.x, head.y - 16);
+            }
+
+            ctx.restore();
+
+            // World boundary
+            ctx.strokeStyle = 'rgba(255, 100, 100, 0.6)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(worldX, worldY, worldWidth, worldHeight);
+
+            // Minimap
+            const mapSize = minimap.width;
+            const scale = mapSize / worldWidth;
+
+            minimapCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            minimapCtx.fillRect(0, 0, mapSize, mapSize);
+            minimapCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            minimapCtx.strokeRect(0, 0, mapSize, mapSize);
+
+            for (let i = 0; i < interpolatedSnakes.length; i++) {
+                const snake = interpolatedSnakes[i];
+                if (!snake.isAlive || snake.segments.length === 0) continue;
+
+                const head = snake.segments[0];
+                const isMe = snake.id === state.mySnakeId;
+
+                minimapCtx.fillStyle = snake.color;
+                minimapCtx.beginPath();
+                minimapCtx.arc(head.x * scale, head.y * scale, isMe ? 4 : 2, 0, Math.PI * 2);
+                minimapCtx.fill();
+            }
+
+            if (isTouchingRef.current) sendMovement();
+
+            animationRef.current = requestAnimationFrame(render);
         };
 
-        animationId = requestAnimationFrame(animate);
+        animationRef.current = requestAnimationFrame(render);
 
         return () => {
-            cancelAnimationFrame(animationId);
+            window.removeEventListener('resize', resizeCanvas);
+            if (animationRef.current) cancelAnimationFrame(animationRef.current);
         };
-    }, []);
+    }, [sendMovement]);
 
-    if (!gameState) {
-        return <div className="loading">Yılan Yükleniyor...</div>;
-    }
-
-    const mySnake = gameState.snakes.find(s => s.id === gameState.mySnakeId);
-    const isAlive = mySnake?.isAlive;
+    const myName = serverStateRef.current?.snakes?.find(s => s.id === serverStateRef.current?.mySnakeId)?.name;
 
     return (
-        <div className="yilan-container">
+        <div
+            className="yilan-container"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+        >
             <canvas
                 ref={canvasRef}
                 className="game-canvas"
-                onMouseMove={handleMouseMove}
-                onTouchMove={handleTouchMove}
                 onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             />
 
-            {/* Minimap */}
-            <canvas
-                ref={minimapRef}
-                className="minimap"
-                width={120}
-                height={120}
-            />
+            <canvas ref={minimapRef} className="minimap" width={100} height={100} />
 
-            {/* Leaderboard */}
             <div className="leaderboard">
-                <h3>Leaderboard</h3>
-                {gameState.leaderboard.map((entry, i) => (
-                    <div
-                        key={i}
-                        className={`leaderboard-entry ${entry.name === mySnake?.name ? 'me' : ''}`}
-                    >
+                <h3>Skor</h3>
+                {leaderboard.slice(0, 5).map((entry, i) => (
+                    <div key={i} className={`leaderboard-entry ${entry.name === myName ? 'me' : ''}`}>
                         <span className="rank">#{entry.rank}</span>
                         <span className="color-dot" style={{ backgroundColor: entry.color }}></span>
                         <span className="name">{entry.name}</span>
@@ -264,189 +400,32 @@ function Yilan({ room, playerId }) {
                 ))}
             </div>
 
-            {/* My Score */}
-            {isAlive && mySnake && (
-                <div className="my-score">
-                    Uzunluk: {mySnake.segments.length}
-                </div>
+            {isAlive && myLength > 0 && (
+                <div className="my-score">Uzunluk: {myLength}</div>
             )}
 
-            {/* Boost Button */}
             <button
                 className={`boost-btn ${isBoosting ? 'active' : ''} ${!isAlive ? 'disabled' : ''}`}
                 onMouseDown={handleBoostStart}
                 onMouseUp={handleBoostEnd}
                 onMouseLeave={handleBoostEnd}
-                onTouchStart={(e) => { e.preventDefault(); handleBoostStart(); }}
-                onTouchEnd={(e) => { e.preventDefault(); handleBoostEnd(); }}
+                onTouchStart={handleBoostStart}
+                onTouchEnd={handleBoostEnd}
                 disabled={!isAlive}
             >
-                ⚡ BOOST
+                ⚡
             </button>
 
-            {/* Death Overlay */}
-            {!isAlive && gameState.respawnIn > 0 && (
+            {!isAlive && respawnIn > 0 && (
                 <div className="death-overlay">
-                    <h2>Öldün!</h2>
-                    <p>Yeniden doğma: {Math.ceil(gameState.respawnIn / 1000)}s</p>
+                    <h2>💀</h2>
+                    <p>{Math.ceil(respawnIn / 1000)}s</p>
                 </div>
             )}
+
+            <div className="touch-hint">Basılı tut → Yönlendir</div>
         </div>
     );
-}
-
-// Helper functions for drawing
-function drawHexGrid(ctx, camera, canvasWidth, canvasHeight, worldWidth, worldHeight) {
-    const hexSize = 40;
-    const hexHeight = hexSize * 2;
-    const hexWidth = Math.sqrt(3) * hexSize;
-    const vertDist = hexHeight * 0.75;
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-    ctx.lineWidth = 1;
-
-    const startX = Math.floor((camera.x - canvasWidth / 2) / hexWidth) - 1;
-    const endX = Math.ceil((camera.x + canvasWidth / 2) / hexWidth) + 1;
-    const startY = Math.floor((camera.y - canvasHeight / 2) / vertDist) - 1;
-    const endY = Math.ceil((camera.y + canvasHeight / 2) / vertDist) + 1;
-
-    for (let row = startY; row <= endY; row++) {
-        for (let col = startX; col <= endX; col++) {
-            const x = col * hexWidth + (row % 2) * (hexWidth / 2);
-            const y = row * vertDist;
-
-            // Skip if outside world
-            if (x < -hexWidth || x > worldWidth + hexWidth ||
-                y < -hexHeight || y > worldHeight + hexHeight) continue;
-
-            // Convert to screen coordinates
-            const screenX = x - camera.x + canvasWidth / 2;
-            const screenY = y - camera.y + canvasHeight / 2;
-
-            drawHexagon(ctx, screenX, screenY, hexSize);
-        }
-    }
-}
-
-function drawHexagon(ctx, x, y, size) {
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i - Math.PI / 6;
-        const hx = x + size * Math.cos(angle);
-        const hy = y + size * Math.sin(angle);
-        if (i === 0) {
-            ctx.moveTo(hx, hy);
-        } else {
-            ctx.lineTo(hx, hy);
-        }
-    }
-    ctx.closePath();
-    ctx.stroke();
-}
-
-function drawOrb(ctx, orb) {
-    // Glow effect
-    const gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.size * 2);
-    gradient.addColorStop(0, orb.color);
-    gradient.addColorStop(0.5, orb.color + '80');
-    gradient.addColorStop(1, 'transparent');
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(orb.x, orb.y, orb.size * 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Core
-    ctx.fillStyle = orb.color;
-    ctx.beginPath();
-    ctx.arc(orb.x, orb.y, orb.size, 0, Math.PI * 2);
-    ctx.fill();
-}
-
-function drawSnake(ctx, snake, isMe) {
-    if (snake.segments.length === 0) return;
-
-    const segments = snake.segments;
-    const color = snake.color;
-
-    // Draw body segments (from tail to head)
-    for (let i = segments.length - 1; i >= 0; i--) {
-        const segment = segments[i];
-        const progress = i / segments.length;
-        const radius = 8 + progress * 4; // Thicker at head
-
-        // Body segment
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(segment.x, segment.y, radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Darker outline
-        ctx.strokeStyle = shadeColor(color, -30);
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
-
-    // Draw head
-    const head = segments[0];
-
-    // Head glow if boosting
-    if (snake.isBoosting) {
-        const glow = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, 25);
-        glow.addColorStop(0, color + '80');
-        glow.addColorStop(1, 'transparent');
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(head.x, head.y, 25, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // Eyes
-    const eyeOffset = 5;
-    const eyeRadius = 4;
-    const pupilRadius = 2;
-
-    // Calculate eye positions based on movement direction
-    let angle = 0;
-    if (segments.length > 1) {
-        const dx = head.x - segments[1].x;
-        const dy = head.y - segments[1].y;
-        angle = Math.atan2(dy, dx);
-    }
-
-    const leftEyeX = head.x + Math.cos(angle + 0.5) * eyeOffset;
-    const leftEyeY = head.y + Math.sin(angle + 0.5) * eyeOffset;
-    const rightEyeX = head.x + Math.cos(angle - 0.5) * eyeOffset;
-    const rightEyeY = head.y + Math.sin(angle - 0.5) * eyeOffset;
-
-    // White of eyes
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(leftEyeX, leftEyeY, eyeRadius, 0, Math.PI * 2);
-    ctx.arc(rightEyeX, rightEyeY, eyeRadius, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Pupils
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.arc(leftEyeX + Math.cos(angle) * 1.5, leftEyeY + Math.sin(angle) * 1.5, pupilRadius, 0, Math.PI * 2);
-    ctx.arc(rightEyeX + Math.cos(angle) * 1.5, rightEyeY + Math.sin(angle) * 1.5, pupilRadius, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Name tag (only for non-me snakes or always)
-    ctx.fillStyle = 'white';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(snake.name, head.x, head.y - 20);
-}
-
-function shadeColor(color, percent) {
-    const num = parseInt(color.replace('#', ''), 16);
-    const amt = Math.round(2.55 * percent);
-    const R = Math.max(0, Math.min(255, (num >> 16) + amt));
-    const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amt));
-    const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
-    return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
 }
 
 export default Yilan;
