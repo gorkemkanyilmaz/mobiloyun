@@ -314,7 +314,7 @@ class TahtSavaslariGame {
         const dt = (now - this.tankPushState.lastUpdateTime) / 1000;
         this.tankPushState.lastUpdateTime = now;
 
-        const MOVE_SPEED = 77; // px/s (40% slower than original)
+        const MOVE_SPEED = 100; // px/s (Increased by 30%)
         const ARENA_LENGTH = this.tankPushState.arenaLength;
         const BASE_LINE_TOP = ARENA_LENGTH - 30;
         const BASE_LINE_BOTTOM = 30;
