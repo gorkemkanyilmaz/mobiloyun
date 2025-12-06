@@ -64,6 +64,7 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    width: 100%;
 }
 
 .ab-enemy-section,
@@ -109,13 +110,15 @@
     padding: 5px 0;
 }
 
-/* Grid */
+/* Grid - Responsive full width */
 .ab-grid {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
     padding: 5px;
     border: 2px solid rgba(0, 212, 255, 0.2);
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ab-grid.enemy {
@@ -125,27 +128,29 @@
 
 .ab-grid-row {
     display: flex;
+    width: 100%;
 }
 
 .ab-cell {
-    width: 30px;
-    height: 30px;
+    flex: 1;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(26, 26, 58, 0.5);
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: rgba(255, 255, 255, 0.3);
     transition: all 0.2s ease;
     position: relative;
+    min-width: 0;
 }
 
 .ab-cell.header,
 .ab-cell.row-header {
     background: transparent;
     border: none;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(0, 212, 255, 0.7);
     font-weight: bold;
 }
@@ -176,7 +181,7 @@
     background: rgba(255, 51, 102, 0.3);
     border-color: rgba(255, 51, 102, 0.8);
     box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
-    transform: scale(1.1);
+    transform: scale(1.05);
     z-index: 10;
 }
 
@@ -188,7 +193,7 @@
 @keyframes hit-flash {
     0% {
         background: rgba(255, 255, 0, 0.8);
-        transform: scale(1.3);
+        transform: scale(1.2);
     }
 
     100% {
@@ -208,7 +213,7 @@
 
 /* Markers */
 .ab-marker {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .ab-marker.hit {
@@ -247,7 +252,7 @@
 }
 
 .ab-ship-marker {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 /* Placement Controls - Right below grid */
@@ -518,70 +523,28 @@
     color: #888;
 }
 
-/* Mobile Responsive */
+/* Responsive - cells fill container */
 @media (max-width: 480px) {
     .ab-container {
         padding: 5px;
     }
 
-    .ab-cell {
-        width: 26px;
-        height: 26px;
-    }
-
-    .ab-header h2 {
-        font-size: 1.1rem;
-    }
-
-    .ab-phase-indicator {
-        font-size: 0.8rem;
-    }
-
-    .ab-placement-controls {
-        padding: 6px;
-    }
-
-    .ab-ships-panel h4 {
+    .ab-marker {
         font-size: 0.7rem;
     }
 
-    .ab-ship-btn {
-        padding: 5px 6px;
-    }
-
-    .ab-ship-visual {
-        font-size: 0.55rem;
-    }
-
-    .ab-ship-name {
+    .ab-ship-marker {
         font-size: 0.6rem;
-    }
-
-    .ab-rotate-btn,
-    .ab-ready-btn {
-        padding: 6px 4px;
-        font-size: 0.65rem;
-    }
-
-    .ab-player-status {
-        min-width: 90px;
-        padding: 5px 6px;
-        font-size: 0.65rem;
     }
 }
 
 @media (max-width: 360px) {
-    .ab-cell {
-        width: 22px;
-        height: 22px;
-    }
-
     .ab-marker {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
     }
 
     .ab-ship-marker {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
     }
 
     .ab-ship-visual {
