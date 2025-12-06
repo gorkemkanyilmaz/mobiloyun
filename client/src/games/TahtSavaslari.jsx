@@ -125,10 +125,10 @@ function TrapArena({ gameState, isChallenger, isOpponent, isSpectator, sendActio
             </div>
 
             <div className="ts-trap-info">
-                {isPlacing && isOpponent && <p className="ts-trap-instruction">Tuzakları yerleştir! Her sütun için ÜST veya ALT seç.</p>}
+                {isPlacing && isOpponent && <p className="ts-trap-instruction">Tuzakları yerleştir! Her sütun için ÜST, ORTA veya ALT seç.</p>}
                 {isPlacing && isChallenger && <p className="ts-trap-instruction">Rakip tuzakları yerleştiriyor... Bekle.</p>}
                 {isPlacing && isSpectator && <p className="ts-trap-instruction">Tuzakları görebilirsin! (Seyirci)</p>}
-                {isNavigating && isChallenger && <p className="ts-trap-instruction">Tuzaklardan kaç! Her adımda ÜST veya ALT seç.</p>}
+                {isNavigating && isChallenger && <p className="ts-trap-instruction">Tuzaklardan kaç! Her adımda ÜST, ORTA veya ALT seç.</p>}
                 {isNavigating && !isChallenger && <p className="ts-trap-instruction">Rakip ilerlemeye çalışıyor...</p>}
             </div>
 
